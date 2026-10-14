@@ -65,7 +65,7 @@ Mais quelque chose, quelque part, vient de s'asseoir un peu plus confortablement
 
 *« Ils sont tous là. »*
 
-Et plus loin, plus faible, comme un écho sur de l'eau, quelqu'un qui n'a pas du tout l'air heureux :
+Et plus loin, plus faible, comme un écho sur de l'eau, une autre voix, sans âge, ni d'homme ni de femme, qui n'avait besoin de se presser pour personne :
 
 *« Commençons la fin du monde. »*
 

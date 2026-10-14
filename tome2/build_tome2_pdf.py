@@ -76,11 +76,19 @@ def render(md, narrative):
             out.append(Paragraph(inline(ln[4:]), h3))
             i += 1
         elif ln.startswith(">"):
-            buf = []
+            paras, cur = [], []
             while i < len(lines) and lines[i].startswith(">"):
-                buf.append(lines[i].lstrip("> ").strip())
+                t = lines[i].lstrip("> ").strip()
+                if t:
+                    cur.append(t)
+                elif cur:
+                    paras.append(cur)
+                    cur = []
                 i += 1
-            out.append(Paragraph(inline(" ".join(b for b in buf if b)), quote))
+            if cur:
+                paras.append(cur)
+            for para in paras:
+                out.append(Paragraph("<br/>".join(inline(t) for t in para), quote))
         elif ln.startswith("|"):
             rows = []
             while i < len(lines) and lines[i].startswith("|"):
@@ -110,7 +118,8 @@ def render(md, narrative):
                     r"^(#|>|\||---|\s*[-*]\s|\s*\d+\.\s)", lines[i]):
                 buf.append(lines[i].strip())
                 i += 1
-            out.append(Paragraph(inline(" ".join(buf)), pstyle))
+            sep = "<br/>" if narrative else " "
+            out.append(Paragraph(sep.join(inline(t) for t in buf), pstyle))
     return out
 
 
@@ -142,18 +151,41 @@ def cover(sub1, sub2):
             PageBreak()]
 
 
-# --- PDF 1 : le livre (couverture + chapitre 1) ---
-ch1 = read("chapitre_01.md")
-story = cover("Tome 2 — brouillon", "Chapitre 1")
-story += [Paragraph("PROJECT-M13 — TOME 2", label), Paragraph("Chapitre 1", label),
-          Paragraph("LE COULOIR", chapter_title)]
-story += render(ch1.split("# LE COULOIR", 1)[1], narrative=True)
-build("PROJECT-M13_Tome2_chapitre1.pdf", "PROJECT-M13 Tome 2 - Chapitre 1", story)
+def chapter(n):
+    """Lit chapitre_NN.md et renvoie (titre, flowables)."""
+    md = read("chapitre_%02d.md" % n)
+    title = re.search(r"^# (?!PROJECT)(.+)$", md, re.M).group(1).strip()
+    body_md = md.split("# " + title, 1)[1]
+    story = [Paragraph("PROJECT-M13 — TOME 2", label), Paragraph("Chapitre %d" % n, label),
+             Paragraph(inline(title), chapter_title)]
+    return title, story + render(body_md, narrative=True)
 
-# --- PDF 2 : bible + plan ---
-bible = read("00_bible_et_plan.md")
-story = cover("Tome 2", "Bible &amp; plan des chapitres")
-story += [Paragraph("PROJECT-M13 — TOME 2 : LES PAGES RETIRÉES", h1)]
-story += render(bible.split("\n", 1)[1], narrative=False)
-build("PROJECT-M13_Tome2_bible_et_plan.pdf", "PROJECT-M13 Tome 2 - Bible et plan", story)
+
+def doc_pdf(out_name, pdf_title, sub, md_name):
+    md = read(md_name)
+    story = cover("Tome 2", sub)
+    story += [Paragraph(inline(md.splitlines()[0].lstrip("# ")), h1)]
+    story += render(md.split("\n", 1)[1], narrative=False)
+    build(out_name, pdf_title, story)
+
+
+# --- PDF 1 : le livre complet ---
+chapters = [chapter(n) for n in range(1, 14)]
+toc = [Paragraph("Sommaire", h1), Spacer(1, 4 * mm)]
+TOC = ["Le couloir", "Nuit blanche à Tours", "Le livre", "Le distributeur s'allume", "Le bienfaiteur",
+       "Page 2 : la mère d'Aubin", "Le lien", "Les coïncidences", "Le plan de Vasseur", "Ennemis alliés",
+       "Ce que Darius ne savait pas", "Le bon moment", "Le jeudi"]
+for n, t in enumerate(TOC, 1):
+    toc.append(Paragraph("<b>%d.</b>&nbsp;&nbsp;%s" % (n, inline(t)), doc_body))
+toc.append(PageBreak())
+story = cover("Tome 2", "Version complète — 13 chapitres") + toc
+for _, flow in chapters:
+    story += flow + [PageBreak()]
+build("PROJECT-M13_Tome2_complet.pdf", "PROJECT-M13 Tome 2 - Les Pages Retirées", story[:-1])
+
+# --- PDF 2 et 3 : bible et notes ---
+doc_pdf("PROJECT-M13_Tome2_bible_et_plan.pdf", "PROJECT-M13 Tome 2 - Bible et plan",
+        "Bible &amp; plan des chapitres", "00_bible_et_plan.md")
+doc_pdf("PROJECT-M13_Tome2_notes_de_fin.pdf", "PROJECT-M13 Tome 2 - Notes de fin",
+        "Notes de fin &amp; décisions", "01_notes_de_fin.md")
 print("ok")

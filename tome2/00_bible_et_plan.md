@@ -1,113 +1,88 @@
 # PROJECT-M13 — TOME 2 : LES PAGES RETIRÉES
 
-> Document de travail. Tout ce qui est marqué **[À VALIDER]** est une proposition de Claude, pas une décision.
+> Bible mise à jour après rédaction complète du tome. Tout ce qui est marqué **[À VALIDER]** est une décision prise par Claude pendant l'écriture.
 
 ---
 
 ## 1. Le pitch en 5 lignes
 
-Onze ans après l'« accident » de Darius, Ambroise Vasseur lance « la fin du monde ». Dans le même instant, Darius se réveille dans le couloir de son propre jeu. Pour lui, quelques minutes se sont écoulées. Dehors, il s'est écoulé onze ans. Un seul être sent chacune de ses émotions : **Aubin**, le garçon de la légende, un narcissique charmant qui le protège de tout, parce que lui seul a le droit de le tuer.
+Onze ans après l'« accident » de Darius, Ambroise Vasseur lance « la fin du monde ». Dans le même instant, Darius se réveille dans le couloir de son propre jeu. Pour lui, quelques minutes ont passé. Dehors, onze ans. Un seul être sent chacune de ses émotions : **Aubin**, le garçon de la légende, un narcissique charmant qui le protège de tout, parce que lui seul a le droit de le tuer.
 
 **Thème (hérité du tome 1) :** le mensonge confortable contre la vérité.
-**Variation du tome 2 :** *protéger* quelqu'un et *le garder pour soi* peuvent être le même geste.
+**Variation du tome 2 :** la vérité sans personne à côté est aussi une violence. Et protéger quelqu'un peut vouloir dire le garder pour soi.
 
 ---
 
-## 2. La légende : *Le Livre des Pages Retirées* (exemplaire unique)
+## 2. La légende : *Le Livre des Pages Retirées*
 
-- **1894, Luynes.** Une grange brûle chez le notable Anselme Rivière. On accuse Aubin, 13 ans, fils de la lavandière. Le vrai coupable est Léopold, fils du notable. Tout le village le sait et se tait.
-- On enferme Aubin dans une cave du coteau « pour la nuit ». Les gendarmes ne viennent jamais. On dit à sa mère qu'il s'est enfui de honte. Elle le cherche neuf ans.
-- **1903.** On rouvre la cave : ni corps, ni os. Des centaines de traits à la suie, par groupes de cinq, et une phrase : **« Je m'en souviens pour vous. »**
-- **Légende urbaine :** dans le noir, quelque chose lui a répondu. Il a signé un pacte : garder la mémoire de tout ce que le village préfère oublier, et ne plus jamais être tout à fait quelqu'un ni tout à fait personne.
-
-C'est l'**origine du distributeur** : chaque objet est une page qu'Aubin retient.
+- **1894, Luynes.** Une grange brûle chez le notable Anselme Rivière. On accuse Aubin Delorme, 13 ans, fils de la lavandière Mélanie. Le vrai coupable est Léopold Rivière. Tout le village le sait et se tait.
+- On enferme Aubin dans une cave du coteau « pour la nuit ». Les gendarmes ne viennent jamais. À sa mère, on dit qu'il s'est enfui. Elle le cherche neuf ans.
+- **1903.** On rouvre la cave : ni corps, ni os. 3 287 traits à la suie, par groupes de cinq, et la phrase **« Je m'en souviens pour vous. »**
+- **Légende urbaine :** dans le noir, quelque chose a répondu à Aubin. Il a signé un pacte.
 
 ---
 
-## 3. Les règles du pacte (à ne jamais contredire)
+## 3. Les règles du pacte
 
-1. **Aubin et Darius sont liés.** Darius est la « copie » d'Aubin. Ils ressentent tout l'un de l'autre : sensations, douleur, émotions.
-2. **Seul l'un peut délier l'autre.** Aubin n'est libéré que s'il tue Darius de sa main. Même règle pour Darius envers Aubin.
-3. **Si un tiers tue l'un des deux**, le lien ne se rompt pas : le survivant reste lié pour toujours, à un mort.
-4. **Donc Aubin protège Darius** de tout le monde, sauf de lui-même.
-5. **Darius est aussi fort qu'Aubin** mais l'ignore. Aubin le sait, et le lui cache.
-6. **« Le bon moment » :** Aubin ne tuera Darius qu'une fois sa force pleinement éveillée, car c'est seulement alors que le meurtre le libère *et* lui rend tout. Plus Darius grandit, plus il devient dangereux pour lui. C'est son propre piège.
-
-**Conséquence sur le tome 1 :** Darius n'est pas mort au chapitre 9. Personne d'autre que Darius ne pouvait y mourir sans enfermer Aubin. L'« accident » est une histoire de rechange. **[À VALIDER : le mécanisme exact de la mise en sommeil]**
+1. **Aubin et Darius sont liés** : sensations, douleur, émotions. Darius est la **cinquième copie** d'Aubin (1962, 1979 et deux autres avant lui, plus Darius en 2011). **[À VALIDER]**
+2. **Seul l'un peut délier l'autre**, en le tuant de sa main.
+3. **Si un tiers tue l'un des deux**, le lien se scelle à jamais : le survivant reste attaché à un mort.
+4. **Aubin protège donc Darius** de tout le monde, sauf de lui-même. Il le « cultive » depuis sa naissance (les 14 coïncidences du tome 1).
+5. **Darius est plus fort qu'Aubin.** Aubin retient ; Darius *rend* avec la chaleur qu'il faut.
+6. **Le « bon moment »** : Aubin ne peut tuer Darius qu'une fois sa force éveillée.
+7. **Découverte du chapitre 7** : le lien joue dans les deux sens. Quand Aubin ment, Darius ressent une chaleur sucrée dans la poitrine. Darius est un détecteur de mensonges vivant.
+8. **Résolution du chapitre 12** : Aubin avait demandé « que quelqu'un se souvienne de moi ». Le Lecteur lui a donné « la mémoire de tous les autres » à la place. Darius remplit enfin le vœu d'origine. Le contrat est exécuté. Le lien reste (ils se sentent), mais la clause « l'un doit tuer l'autre » tombe.
 
 ---
 
 ## 4. Personnages
 
-### Aubin — l'antagoniste
-- Élégant, théâtral, drôle, vaniteux. Se prend pour le héros de sa propre légende.
-- Protège Darius par des gestes grandioses, pour qu'on les remarque.
-- **Sa torture :** il sent tout ce que ressent Darius. L'amitié, la tendresse de Franck, le courage de Clara... tout ce qu'il n'a jamais eu. Il déteste ça. Il s'y attache.
-- **Sa blessure :** un enfant de 13 ans qui compte des traits dans le noir. Sa haine est légitime, sa vanité l'a pourrie.
-- **Sa faille :** il ne supporte pas d'être ignoré. Darius l'ignore sans le savoir.
-- **Il est la VOIX INCONNUE** de la fin du tome 1 (« Commençons la fin du monde »). **[À VALIDER]**
-
-### Darius
-- Toujours 15 ans : le couloir ne l'a pas fait vieillir.
-- Sa force dormante est le grand secret du tome. Il la découvre au chapitre 11.
-
-### Émilie (19 ans, étudiante à Tours, sœur d'Alex)
-- Le personnage-fenêtre du monde réel. Elle rêve de couloirs et de portes numérotées depuis des années : ce sont ceux du jeu de Darius.
-- Elle n'est pas « la nouvelle porteuse » comme on le croit. **[À VALIDER]** Elle est le **point d'ancrage** par lequel Darius peut revenir.
-
-### Clara et Alex (26 ans) et Franck
-- Clara est devenue chercheuse en archives, auteure d'un petit roman sur Darius. Alex est dans la cybersécurité. Franck cultive la vigne de Templier.
-- Ils ont enterré un garçon vivant, sans le savoir. Ce poids doit être joué, pas esquivé.
-
-### Ambroise Vasseur
-- Veut forcer le lien : faire tuer Darius par un tiers pour piéger Aubin à jamais et prendre son pouvoir.
-- Il croit *sauver* le monde. Odile, son doute vivant.
-
-### Kayden
-- Reste « dilué mais pas éteint ». Il a été une première tentative de Vasseur pour copier le lien. **[À VALIDER]**
+- **Aubin Delorme** : élégant, théâtral, vaniteux, drôle. Mange des pêches (seul bon souvenir gardé : Darius Garnier, 1962). Hait être ignoré. Se plaint extrêmement bien.
+- **Darius Lenoir** : 15 ans pour toujours (né en 2011, mort officiellement en 2026). Sa force : accompagner une vérité, pas seulement la rendre.
+- **Émilie Mercier** (19 ans) : petite sœur d'Alex. Rêve de couloirs depuis 8 ans. Frappe le code de Darius (deux coups courts, un long) sans l'avoir appris. **La page 1 est à son nom** (final).
+- **Clara Roche** (26 ans) : archiviste aux Archives départementales, auteure de *La Page 404*.
+- **Alex Mercier** (26 ans) : cybersécurité à Tours. Humour, loyauté.
+- **Franck Lenoir** (54 ans) : père de Darius, vigneron. Il a sa « Cuvée Templier ». C'est lui qui frappe Aubin.
+- **La mère de Darius** (46 ans) : sans prénom pour l'instant. Laisse un billet de cinq euros tous les jeudis depuis onze ans (572 billets).
+- **Ambroise Vasseur** (58 ans) : arrière-arrière-petit-fils de Léopold Rivière. Croit racheter un péché héréditaire par la « restitution ».
+- **Odile Marchetti** (71 ans) : sœur de Templier, ex-« Marge ». Refuse de tuer Darius.
+- **Théodore Lemaire** (79 ans) : archiviste de Chinon, expéditeur du Livre.
+- **Le Lecteur** : voix sans âge ni sexe, qui collectionne les pages. C'est lui qui a répondu à Aubin dans la cave. Veut un meurtre par un tiers, pour garder deux pages scellées. Il est la VOIX INCONNUE de la fin du tome 1.
+- **Kayden** : n'apparaît que comme écho (« il m'a prêté son corps »). Reste à développer. **[À VALIDER]**
 
 ---
 
-## 5. Leçons du tome 1 appliquées au tome 2
+## 5. Chronologie du tome 2
 
-- **Chapitres de 3 000 à 5 000 mots** (au lieu de 5 000 à 13 000).
-- **Une scène = une image forte.** Pas de paragraphes d'ambiance du type « comme si la maison retenait son souffle ».
-- **Plus de dialogues vifs**, comme au chapitre 1 du tome 1.
-- **Chaque chapitre finit sur une question**, pas sur un résumé.
-- **Relecture orthographique** avant mise en forme.
-
----
-
-## 6. Plan en 12 chapitres
-
-### ACTE I — Le réveil (ch. 1 à 4)
-1. **LE COULOIR** — Darius se réveille dans son jeu. Il sent un plaisir qui n'est pas le sien. Des traits à la suie sur le mur : quelqu'un compte les jours pour lui.
-2. **NUIT BLANCHE À TOURS** — Émilie se réveille d'un rêve de portes. Les lignes verticales du Non-lieu apparaissent sur la vitre de sa chambre. Une porte, numérotée, est là où le mur devrait être.
-3. **LE LIVRE** — Clara reçoit un colis sans expéditeur : un livre à exemplaire unique. Première page : la légende d'Aubin. Une dédicace au dos : « Pour celle qui a écrit sur Darius. »
-4. **LE DISTRIBUTEUR S'ALLUME** — À Luynes, la machine réapparaît. Dedans : le casque fondu de Darius. Étiquette : **« SUJET : DARIUS L. — PAGE 0. »**
-
-### ACTE II — Le lien (ch. 5 à 8)
-5. **LE BIENFAITEUR** — Émilie est sauvée de justesse d'un agent de Vasseur par un homme élégant qui lui laisse sa carte : A. R. Il sait trop de choses sur sa famille.
-6. **PAGE 2 : LA MÈRE D'AUBIN** *(flashback 1903)* — La lavandière devant la cave rouverte. Ce qu'on lui a dit, ce qu'elle a compris, ce qu'elle n'a jamais pardonné.
-7. **LE LIEN** — Darius sent la douleur de quelqu'un d'autre. Aubin lui parle pour la première fois, par le couloir : il se présente comme un ami. Le lecteur sait que c'est faux.
-8. **LES COÏNCIDENCES** — Clara et Alex relisent le tome 1 avec le Livre en main. Chaque « coup de chance » de Darius a un point commun : une main invisible. Ils comprennent qu'il est protégé, et que ce n'est pas gratuit.
-
-### ACTE III — Le choix (ch. 9 à 12)
-9. **LE PLAN DE VASSEUR** — La « fin du monde » : forcer le lien en faisant tuer Darius par une tierce personne. Odile hésite.
-10. **ENNEMIS ALLIÉS** *(avec flashback 1962, la première copie)* — Aubin doit défendre Darius contre Vasseur. Il le fait avec panache, en se plaignant.
-11. **CE QUE DARIUS NE SAVAIT PAS** — Darius éveille sa force. Aubin la sent et, pour la première fois, a peur.
-12. **LE BON MOMENT** — Face à face. Aubin peut le tuer. Darius peut le tuer. Chacun ressent ce que l'autre ressent. Ce qu'ils choisissent ouvre le tome 3.
-
-### Les trois pages-flashbacks
-- **Page 1 (1894)** : le garçon de la cave — déjà rédigée, intégrée au chapitre 3.
-- **Page 2 (1903)** : la mère d'Aubin — chapitre 6.
-- **Page 3 (1962)** : la première « copie » de Darius, celle du manuscrit trouvé au tome 1 — chapitre 10.
+| Quand | Quoi |
+|---|---|
+| Nuit du 16 au 17 février | Fin du tome 1. Darius se réveille (ch. 1). |
+| 17 février, 00h04 | Émilie voit la porte 0 (ch. 2). |
+| 17 février, matin | Clara reçoit le Livre. Alex et Émilie. Plaque « PAGE 0 » (ch. 3). |
+| 17 février, jour | Le distributeur à Luynes. Franck se souvient (ch. 4). |
+| Nuit du 17 au 18 | Aubin sauve Émilie (ch. 5). |
+| 18-19 février | Darius apprend les 11 ans. Rencontre Aubin (ch. 7). Page 2 (ch. 6). |
+| 19 février, soir | Les coïncidences. Lemaire (ch. 8). |
+| Nuit du 19 au 20 | La tombe. Le Lecteur parle (ch. 9). |
+| 20 février, 3 h | La cave. Page 3 (ch. 10). |
+| Vendredi 20 février | La restitution à midi (ch. 11). |
+| Vendredi minuit | La porte s'ouvre. Le choix (ch. 12). |
+| Samedi 21 février, matin | La mère de Darius (ch. 13). |
 
 ---
 
-## 7. Questions ouvertes pour toi
+## 6. Plan réalisé
 
-1. **Titre :** *Les Pages Retirées* te convient ? Autres pistes : *La Page 0*, *Je m'en souviens pour vous*.
-2. **Fin du tome 2 :** Aubin meurt-il, est-il libéré, ou le lien se transforme-t-il ? (Je recommande de ne pas trancher avant le chapitre 9.)
-3. **Romance :** on garde le tome sans triangle amoureux (ma recommandation) ?
-4. **Kayden :** vrai personnage du tome 2, ou simple écho ?
+1. **Le couloir** — Darius se réveille dans son jeu.
+2. **Nuit blanche à Tours** — Émilie, la porte, le dessin du chien (page 41).
+3. **Le livre** — Clara, la légende, la plaque « A. D. ».
+4. **Le distributeur s'allume** — Franck se rappelle son fils.
+5. **Le bienfaiteur** — Aubin sauve Émilie.
+6. **Page 2 : la mère d'Aubin** — flashback 1903.
+7. **Le lien** — Darius, Aubin, le détecteur de mensonges.
+8. **Les coïncidences** — le « verger » d'Aubin, Lemaire.
+9. **Le plan de Vasseur** — la tombe, le Lecteur.
+10. **Ennemis alliés** — la cave, le poing de Franck, page 3 (1962).
+11. **Ce que Darius ne savait pas** — la restitution, la cave vue de l'intérieur.
+12. **Le bon moment** — le choix, « Je me souviens de toi ».
+13. **Le jeudi** — épilogue : la mère de Darius et le billet de cinq euros.
