@@ -151,12 +151,12 @@ def cover(sub1, sub2, title="LES PAGES RETIRÉES"):
             PageBreak()]
 
 
-def chapter(n):
+def chapter(n, tome_label="PROJECT-M13 — TOME 2"):
     """Lit chapitre_NN.md et renvoie (titre, flowables)."""
     md = read("chapitre_%02d.md" % n)
     title = re.search(r"^# (?!PROJECT)(.+)$", md, re.M).group(1).strip()
     body_md = md.split("# " + title, 1)[1]
-    story = [Paragraph("PROJECT-M13 — TOME 2", label), Paragraph("Chapitre %d" % n, label),
+    story = [Paragraph(tome_label, label), Paragraph("Chapitre %d" % n, label),
              Paragraph(inline(title), chapter_title)]
     return title, story + render(body_md, narrative=True)
 
