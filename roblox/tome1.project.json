@@ -1,0 +1,23 @@
+{
+  "name": "M13-Tome1",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "Shared": {
+        "$path": "src/shared"
+      }
+    },
+    "ServerScriptService": {
+      "Tome1": {
+        "$path": "src/tome1/server"
+      }
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "Tome1": {
+          "$path": "src/tome1/client"
+        }
+      }
+    }
+  }
+}

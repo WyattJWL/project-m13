@@ -1,0 +1,136 @@
+name: Roblox M13
+
+# Vérifie le code Luau, compile les deux « places » (lobby + Tome 1) et, sur demande,
+# les publie sur Roblox via l'API Open Cloud.
+#
+# Réglages à faire dans GitHub (Settings > Secrets and variables > Actions) :
+#   Secret    ROBLOX_API_KEY   : clé Open Cloud (permission « Places : Write » limitée à ton expérience)
+#   Variable  UNIVERSE_ID      : identifiant de l'expérience (universe)
+#   Variable  LOBBY_PLACE_ID   : identifiant du lieu de départ (lobby)
+#   Variable  TOME1_PLACE_ID   : identifiant du lieu du Tome 1
+# Voir roblox/README.md pour le détail pas à pas.
+
+on:
+  push:
+    branches: [main, "claude/**"]
+    paths:
+      - "roblox/**"
+      - ".github/workflows/roblox-m13.yml"
+  pull_request:
+    paths:
+      - "roblox/**"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publier sur Roblox (nécessite le secret et les variables)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  ROJO_VERSION: "7.7.1"
+  STYLUA_VERSION: "2.6.0"
+  LUNE_VERSION: "0.11.0"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: roblox
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache des outils
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/bin
+          key: m13-tools-${{ runner.os }}-rojo${{ env.ROJO_VERSION }}-stylua${{ env.STYLUA_VERSION }}-lune${{ env.LUNE_VERSION }}
+
+      - name: Installer Rojo, StyLua et Lune
+        run: |
+          command -v rojo >/dev/null || cargo install rojo --locked --version "$ROJO_VERSION"
+          command -v stylua >/dev/null || cargo install stylua --locked --version "$STYLUA_VERSION" --features luau
+          command -v lune >/dev/null || cargo install lune --locked --version "$LUNE_VERSION"
+
+      - name: Format du code (StyLua)
+        run: stylua --check src tests
+
+      - name: Tests de la logique (Lune)
+        run: lune run tests/run
+
+      - name: Vérification de l'API Roblox (Lune)
+        run: lune run tests/api_check
+
+      - name: Test de fumée des décors et des ennemis (Lune)
+        run: lune run tests/smoke
+
+      - name: Injecter les identifiants des lieux
+        env:
+          LOBBY_PLACE_ID: ${{ vars.LOBBY_PLACE_ID }}
+          TOME1_PLACE_ID: ${{ vars.TOME1_PLACE_ID }}
+        run: |
+          set -euo pipefail
+          LOBBY="${LOBBY_PLACE_ID:-0}"
+          TOME1="${TOME1_PLACE_ID:-0}"
+          [[ "$LOBBY" =~ ^[0-9]+$ ]] || { echo "::error::LOBBY_PLACE_ID invalide"; exit 1; }
+          [[ "$TOME1" =~ ^[0-9]+$ ]] || { echo "::error::TOME1_PLACE_ID invalide"; exit 1; }
+          printf -- '--!strict\nreturn {\n\tLobby = %s,\n\tTome1 = %s,\n}\n' "$LOBBY" "$TOME1" > src/shared/PlaceIds.luau
+          cat src/shared/PlaceIds.luau
+
+      - name: Compiler les lieux
+        run: |
+          mkdir -p build
+          rojo build lobby.project.json -o build/M13-Lobby.rbxl
+          rojo build tome1.project.json -o build/M13-Tome1.rbxl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: m13-places
+          path: roblox/build/*.rbxl
+          retention-days: 14
+
+  publish:
+    needs: check
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    runs-on: ubuntu-latest
+    environment: roblox
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: m13-places
+          path: build
+
+      - name: Publier sur Roblox (Open Cloud)
+        env:
+          ROBLOX_API_KEY: ${{ secrets.ROBLOX_API_KEY }}
+          UNIVERSE_ID: ${{ vars.UNIVERSE_ID }}
+          LOBBY_PLACE_ID: ${{ vars.LOBBY_PLACE_ID }}
+          TOME1_PLACE_ID: ${{ vars.TOME1_PLACE_ID }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ROBLOX_API_KEY:-}" ]; then
+            echo "::error::Le secret ROBLOX_API_KEY est manquant."
+            exit 1
+          fi
+          for name in UNIVERSE_ID LOBBY_PLACE_ID TOME1_PLACE_ID; do
+            value="${!name:-}"
+            [[ "$value" =~ ^[0-9]+$ ]] || { echo "::error::La variable $name est manquante ou invalide."; exit 1; }
+          done
+
+          publish() {
+            echo "Publication du lieu $1 ($2)..."
+            curl --fail-with-body --silent --show-error -X POST \
+              "https://apis.roblox.com/universes/v1/${UNIVERSE_ID}/places/$1/versions?versionType=Published" \
+              -H "x-api-key: ${ROBLOX_API_KEY}" \
+              -H "Content-Type: application/octet-stream" \
+              --data-binary "@$2"
+            echo
+          }
+
+          publish "$TOME1_PLACE_ID" build/M13-Tome1.rbxl
+          publish "$LOBBY_PLACE_ID" build/M13-Lobby.rbxl
