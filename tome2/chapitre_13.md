@@ -43,7 +43,7 @@ Aubin ne réagit pas. Il tourne une page de son journal, qu'il tient toujours à
 
 Darius sourit.
 
-En contrebas, une petite fille d'une dizaine d'années traverse la place, son cartable sur le dos, sa mère à la traîne. Le feu piéton passe au vert à l'instant exact où elle pose le pied sur le passage. Une camionnette qui allait griller le rouge freine net, et le conducteur lui fait signe de passer avec un sourire d'excuse. Elle ne lève même pas la tête. Elle a l'air d'avoir l'habitude.
+En contrebas, une petite fille d'une dizaine d'années traverse la place, un sac de boulangerie à la main, une vieille dame à la traîne. Le feu piéton passe au vert à l'instant exact où elle pose le pied sur le passage. Une camionnette qui allait griller le rouge freine net, et le conducteur lui fait signe de passer avec un sourire d'excuse. Elle ne lève même pas la tête. Elle a l'air d'avoir l'habitude.
 
 Pendant une demi-seconde, il flotte dans l'air une odeur que Darius ne connaît pas : celle d'une allumette qu'on vient d'éteindre.
 
