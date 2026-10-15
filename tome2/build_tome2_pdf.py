@@ -142,9 +142,9 @@ def read(name):
         return f.read()
 
 
-def cover(sub1, sub2):
+def cover(sub1, sub2, title="LES PAGES RETIRÉES"):
     return [Spacer(1, 55 * mm), Paragraph("PROJECT-M13", title_style),
-            Paragraph("LES PAGES RETIRÉES", ParagraphStyle(
+            Paragraph(title, ParagraphStyle(
                 "t2", parent=title_style, fontSize=16, textColor=colors.HexColor("#444444"))),
             Spacer(1, 10 * mm), Paragraph(sub1, subtitle_style), Paragraph(sub2, subtitle_style),
             Spacer(1, 40 * mm), Paragraph("Une histoire de Wyatt Lapaillerie-Engone", credit_style),
@@ -169,23 +169,24 @@ def doc_pdf(out_name, pdf_title, sub, md_name):
     build(out_name, pdf_title, story)
 
 
-# --- PDF 1 : le livre complet ---
-chapters = [chapter(n) for n in range(1, 14)]
-toc = [Paragraph("Sommaire", h1), Spacer(1, 4 * mm)]
-TOC = ["Le couloir", "Nuit blanche à Tours", "Le livre", "Le distributeur s'allume", "Le bienfaiteur",
-       "Page 2 : la mère d'Aubin", "Le lien", "Les coïncidences", "Le plan de Vasseur", "Ennemis alliés",
-       "Ce que Darius ne savait pas", "Le bon moment", "Le jeudi"]
-for n, t in enumerate(TOC, 1):
-    toc.append(Paragraph("<b>%d.</b>&nbsp;&nbsp;%s" % (n, inline(t)), doc_body))
-toc.append(PageBreak())
-story = cover("Tome 2", "Version complète — 13 chapitres") + toc
-for _, flow in chapters:
-    story += flow + [PageBreak()]
-build("PROJECT-M13_Tome2_complet.pdf", "PROJECT-M13 Tome 2 - Les Pages Retirées", story[:-1])
+if __name__ == "__main__":
+    # --- PDF 1 : le livre complet ---
+    chapters = [chapter(n) for n in range(1, 14)]
+    toc = [Paragraph("Sommaire", h1), Spacer(1, 4 * mm)]
+    TOC = ["Le couloir", "Nuit blanche à Tours", "Le livre", "Le distributeur s'allume", "Le bienfaiteur",
+           "Page 2 : la mère d'Aubin", "Le lien", "Les coïncidences", "Le plan de Vasseur", "Ennemis alliés",
+           "Ce que Darius ne savait pas", "Le bon moment", "Le jeudi"]
+    for n, t in enumerate(TOC, 1):
+        toc.append(Paragraph("<b>%d.</b>&nbsp;&nbsp;%s" % (n, inline(t)), doc_body))
+    toc.append(PageBreak())
+    story = cover("Tome 2", "Version complète — 13 chapitres") + toc
+    for _, flow in chapters:
+        story += flow + [PageBreak()]
+    build("PROJECT-M13_Tome2_complet.pdf", "PROJECT-M13 Tome 2 - Les Pages Retirées", story[:-1])
 
-# --- PDF 2 et 3 : bible et notes ---
-doc_pdf("PROJECT-M13_Tome2_bible_et_plan.pdf", "PROJECT-M13 Tome 2 - Bible et plan",
-        "Bible &amp; plan des chapitres", "00_bible_et_plan.md")
-doc_pdf("PROJECT-M13_Tome2_notes_de_fin.pdf", "PROJECT-M13 Tome 2 - Notes de fin",
-        "Notes de fin &amp; décisions", "01_notes_de_fin.md")
-print("ok")
+    # --- PDF 2 et 3 : bible et notes ---
+    doc_pdf("PROJECT-M13_Tome2_bible_et_plan.pdf", "PROJECT-M13 Tome 2 - Bible et plan",
+            "Bible &amp; plan des chapitres", "00_bible_et_plan.md")
+    doc_pdf("PROJECT-M13_Tome2_notes_de_fin.pdf", "PROJECT-M13 Tome 2 - Notes de fin",
+            "Notes de fin &amp; décisions", "01_notes_de_fin.md")
+    print("ok")

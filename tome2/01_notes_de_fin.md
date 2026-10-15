@@ -75,7 +75,7 @@
 - Le héros ou l'héroïne du tome 3 vit son histoire **en parallèle** des tomes 1 et 2, sans que le lecteur le sache. Il rencontre Darius et Aubin à la fin du tome 3.
 - Ce personnage est la **copie de Léopold Rivière**, le vrai coupable de 1894. C'est un enfant protégé par le mensonge confortable (les « coups de chance » sentent l'allumette éteinte, comme ceux d'Aubin sentent la pêche).
 - **Twist :** le **Lecteur est Léopold**. Il avait 13 ans comme Aubin (13 deux fois). Son pacte : que personne ne sache jamais que c'était lui. Aubin garde les vérités, Léopold garde les mensonges.
-- Le personnage du tome 3 est probablement une petite fille d'une dizaine d'années, liée à la maison de Fondettes (fille de Vasseur ?). **[À VALIDER]**
+- Le personnage du tome 3 est **Évie Léopoldine Vasseur** (prénom validé), 11 ans, fille d'Ambroise Vasseur. Plan complet dans `tome3/00_plan_tome3.md`.
 
 **Les indices déjà semés dans le tome 2 :**
 1. **Ch. 9 (p. 95-107)** : le Lecteur a un rire « d'enfant poli qu'on n'a jamais grondé », et Odile trouve dans la berline un **dessin d'enfant** de la maison de Fondettes (« Pour papa, qui a toujours raison »).
