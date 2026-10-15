@@ -41,7 +41,15 @@ Darius lève la main. Un salut bref, très simple.
 
 Aubin ne réagit pas. Il tourne une page de son journal, qu'il tient toujours à l'envers, avec la dignité de ceux qui n'ont rien vu. Puis, au bout de deux secondes, sans lever les yeux, il sort de sa poche une pêche et la brandit, très haut, comme on porte un toast.
 
-Darius sourit. Il reprend sa montée.
+Darius sourit.
+
+En contrebas, une petite fille d'une dizaine d'années traverse la place, son cartable sur le dos, sa mère à la traîne. Le feu piéton passe au vert à l'instant exact où elle pose le pied sur le passage. Une camionnette qui allait griller le rouge freine net, et le conducteur lui fait signe de passer avec un sourire d'excuse. Elle ne lève même pas la tête. Elle a l'air d'avoir l'habitude.
+
+Pendant une demi-seconde, il flotte dans l'air une odeur que Darius ne connaît pas : celle d'une allumette qu'on vient d'éteindre.
+
+Sur le banc, Aubin a baissé son journal. Il suit la petite des yeux jusqu'au coin de la rue, sans une plaisanterie, sans une pêche. Puis il le relève, toujours à l'envers, comme si de rien n'était.
+
+Darius reprend sa montée.
 
 ---
 

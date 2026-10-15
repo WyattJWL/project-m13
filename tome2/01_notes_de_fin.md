@@ -64,3 +64,23 @@
 3. La **fin du chapitre 12** (« Je me souviens de toi ») : trop gentille, ou juste ?
 4. Tu veux un **tome 3** centré sur Émilie ?
 5. Tu veux que je **rallonge** le tome 2 (par exemple un chapitre sur Kayden, ou un flashback sur les deux premières copies) ?
+
+---
+
+## 6. PLAN SECRET DU TOME 3 (spoilers)
+
+**Stratégie des chiffres :** tome 1 = « 1 », tome 2 = le lien à deux (Darius et Aubin), tome 3 = « 3 ». 1 et 3 forment **13**, le numéro du projet. À ne révéler qu'à la toute fin du tome 3.
+
+**La piste retenue : le Miroir de Léopold.**
+- Le héros ou l'héroïne du tome 3 vit son histoire **en parallèle** des tomes 1 et 2, sans que le lecteur le sache. Il rencontre Darius et Aubin à la fin du tome 3.
+- Ce personnage est la **copie de Léopold Rivière**, le vrai coupable de 1894. C'est un enfant protégé par le mensonge confortable (les « coups de chance » sentent l'allumette éteinte, comme ceux d'Aubin sentent la pêche).
+- **Twist :** le **Lecteur est Léopold**. Il avait 13 ans comme Aubin (13 deux fois). Son pacte : que personne ne sache jamais que c'était lui. Aubin garde les vérités, Léopold garde les mensonges.
+- Le personnage du tome 3 est probablement une petite fille d'une dizaine d'années, liée à la maison de Fondettes (fille de Vasseur ?). **[À VALIDER]**
+
+**Les indices déjà semés dans le tome 2 :**
+1. **Ch. 9 (p. 95-107)** : le Lecteur a un rire « d'enfant poli qu'on n'a jamais grondé », et Odile trouve dans la berline un **dessin d'enfant** de la maison de Fondettes (« Pour papa, qui a toujours raison »).
+2. **Ch. 9** : le Lecteur dit à Vasseur « c'est ce qui me plaît chez les gens de **votre lignée** ».
+3. **Ch. 11** : la **porte 13** reste fermée, comme si quelqu'un la retenait de l'autre côté. Aubin la regarde puis détourne les yeux.
+4. **Ch. 13** : une petite fille traverse la place, le feu passe au vert pour elle, on sent **l'allumette éteinte**. Aubin baisse son journal pour la suivre des yeux.
+
+**Point à trancher :** la plaque finale du chapitre 12 dit « PAGE 1 — SUJET : ÉMILIE M. ». Trois options : la garder comme fausse piste, la changer en « PAGE 3 — SUJET : ? », ou la laisser floue.

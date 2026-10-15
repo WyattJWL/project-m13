@@ -65,11 +65,13 @@ Ce n'est pas un bruit : c'est une absence de bruit, très forte, qui monte dans 
 
 Puis les portes s'ouvrent.
 
-Toutes. Les quarante, les cent, les mille portes qui ont poussé comme du lierre dans le couloir, claquent ensemble contre leur butée, et un souffle immense en sort. Darius perd l'équilibre. Il tombe à genoux. Il entend, à l'intérieur de son propre crâne, une rumeur qui n'a rien de sonore, des millions de voix, de pleurs, de cris, de silences, de mots qu'on dit pour la première fois à des personnes qu'on aime. Des pères qui apprennent. Des mères qui comprennent. Des enfants qui se souviennent. Des vieillards qui rient, sans comprendre, de vieilles blagues qu'ils croyaient avoir oubliées.
+Presque toutes. Les quarante, les cent, les mille portes qui ont poussé comme du lierre dans le couloir, claquent ensemble contre leur butée, et un souffle immense en sort. Darius perd l'équilibre. Il tombe à genoux. Il entend, à l'intérieur de son propre crâne, une rumeur qui n'a rien de sonore, des millions de voix, de pleurs, de cris, de silences, de mots qu'on dit pour la première fois à des personnes qu'on aime. Des pères qui apprennent. Des mères qui comprennent. Des enfants qui se souviennent. Des vieillards qui rient, sans comprendre, de vieilles blagues qu'ils croyaient avoir oubliées.
 
 Tout le monde ressent tout, en même temps.
 
 Il y a de la joie, dedans. Il y en a très peu.
+
+Une seule porte reste fermée, quelque part sur la gauche. Elle porte un **13**, gravé de travers. Darius la remarque sans comprendre pourquoi. Elle est tiède comme les autres, mais le battant tremble très légèrement, comme si quelqu'un, de l'autre côté, la retenait de toutes ses forces. Aubin, lui, la regarde longtemps. Puis il détourne les yeux.
 
 — Arrête ! crie Aubin.
 

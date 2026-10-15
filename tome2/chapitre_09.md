@@ -149,7 +149,7 @@ Les lignes verticales surgissent sur la pierre blanche. Elles couvrent le marbre
 
 — *C'est exactement ce que je disais.*
 
-La voix a un petit rire, chaleureux, effrayant, comme celui d'un vieux professeur devant une copie touchante et fausse.
+La voix a un petit rire, chaleureux, effrayant, comme celui d'un vieux professeur devant une copie touchante et fausse, ou d'un enfant poli qu'on n'a jamais grondé.
 
 — *Demain, à minuit, la porte zéro s'ouvrira. Le garçon sortira. Faites ce que vous avez prévu. Je ne m'y opposerai pas.*
 
@@ -219,7 +219,13 @@ Odile voit, à l'avant, Vasseur lever les yeux vers le rétroviseur, croiser le 
 
 — Si. Il y en avait une.
 
-Il ne répond pas. Il continue à conduire. Dans le coffre, sous la couverture, le petit corps de cire garde ses mains jointes. Odile baisse les yeux sur ses propres doigts. Elle ouvre la poche de son manteau, en sort la lanterne de laiton. La lumière bleue, à l'intérieur, vacille, comme une flamme qui hésite.
+Il ne répond pas. Il continue à conduire. Dans le coffre, sous la couverture, le petit corps de cire garde ses mains jointes.
+
+Dans la poche de la portière, contre sa cuisse, un papier froissé dépasse. Elle le déplie par réflexe. C'est un dessin au feutre, de ceux qu'on fait à dix ans : la maison de Fondettes, ses grandes fenêtres, un jardin plein de soleil, un monsieur très grand, très gris, et à une lucarne tout en haut, une petite silhouette sans visage qui regarde la route. Dessous, en lettres d'enfant un peu penchées : *Pour papa, qui a toujours raison.*
+
+Ambroise n'a rien remarqué, ou fait semblant. Elle replie le papier et le remet où il était, très doucement, comme on remet un objet qui ne vous appartient pas.
+
+Odile baisse les yeux sur ses propres doigts. Elle ouvre la poche de son manteau, en sort la lanterne de laiton. La lumière bleue, à l'intérieur, vacille, comme une flamme qui hésite.
 
 Et dans le petit miroir déformé du cuivre, elle croit voir, un instant, un visage de quinze ans, brun, anxieux, qui la regarde avec une exactitude terrible, et qui ne lui en veut pas.
 
