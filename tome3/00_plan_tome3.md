@@ -18,6 +18,14 @@ Tome 3 : **Évie**, 11 ans, n'a jamais rien payé de sa vie. Tout ce qui devrait
 | 2 | 2 | Darius et Aubin : porter **à deux** |
 | 3 | **3** | Évie : **faire porter aux autres** |
 
+**Les trois dons :**
+
+| Personnage | Don | Verbe |
+|---|---|---|
+| Aubin | Garder la mémoire des autres | **Retenir** |
+| Darius | Rendre la vérité avec la chaleur qu'il faut | **Rendre** |
+| Évie | **Télékinésie** : éloigner de soi tout ce qui fait mal | **Repousser** |
+
 **1 et 3 = 13.** Aubin et Léopold avaient chacun 13 ans en 1894. Le numéro du projet est révélé au dernier chapitre.
 
 **Titre de travail :** *Les Pages Ajoutées*. Aubin garde les vérités qu'on retire. Léopold garde les mensonges qu'on ajoute.
@@ -38,20 +46,24 @@ Tome 3 : **Évie**, 11 ans, n'a jamais rien payé de sa vie. Tout ce qui devrait
 - **Pourquoi il a manipulé Darius et Aubin :** il cherche en réalité **quelqu'un qui accepte de payer sa dette**. Son pacte l'empêche de mourir, et il ne peut pas arrêter seul.
 - **Les indices du tome 2 :** « les gens de votre lignée » (ch. 9), le rire d'enfant poli, l'allumette éteinte, la porte 13, le dessin de la maison de Fondettes.
 
-### Le troisième don
-- **Évie est la copie de Léopold.** Chaque fois qu'un coût devrait tomber sur elle, il tombe sur quelqu'un d'autre. Ses coïncidences sentent **l'allumette éteinte**.
-- **Émilie** porte une partie de ces coûts. C'est pour ça qu'elle se fait « réécrire » : on remplace sa douleur par du confort. La plaque « PAGE 1 — ÉMILIE M. » est donc **vraie dans le récit**, mais Émilie n'est pas l'héroïne.
+### Le troisième don : la télékinésie
+- **Évie est la copie de Léopold** et elle a un pouvoir qu'elle ne comprend pas : la **télékinésie**.
+- **C'est un réflexe protecteur.** Dès qu'un coup, un choc ou une douleur va la toucher, elle le *repousse* sans le vouloir : un vase qui s'arrête en plein vol, une camionnette qui freine, un feu qui passe au vert.
+- **Action = réaction.** Ce qu'elle repousse ne disparaît pas : ça **retombe sur quelqu'un d'autre**, proche d'elle ou lié à elle. C'est le pacte de Léopold (« que ça ne me coûte rien ») rendu **physique**.
+- **L'odeur d'allumette éteinte** est le signe de ce pouvoir : la friction, juste avant l'étincelle.
+- **Émilie** reçoit une partie de ces retours. Elle ne se casse pas un bras : elle paie **en elle-même**. Sa colère, ses souvenirs et sa douleur s'effacent. C'est ce qui la « réécrit ». La plaque « PAGE 1 — ÉMILIE M. » est donc **vraie dans le récit**, mais Émilie n'est pas l'héroïne.
 - Évie est aussi le **successeur inconnu** attendu par le coffre de la fin du tome 1.
 
 ---
 
 ## 3. Règles du pacte de Léopold
 
-1. **Un coût qui devrait tomber sur Évie** est déplacé vers une personne proche d'elle, ou liée à elle par un lien émotionnel.
-2. **Plus Évie se sent coupable**, plus le système la « réconforte » en lui retirant sa culpabilité. Le coût de cette culpabilité est lui aussi déplacé. C'est un cercle vicieux.
-3. **Évie ne peut pas être blessée** tant que le système tient. Elle apprend en revanche que quelque chose cloche.
-4. **Le pacte ne tombe que si quelqu'un accepte de payer volontairement.** Ni par punition, ni par contrainte.
-5. **Darius** peut porter *avec* quelqu'un. **Aubin** sait porter *seul*. Il faudra les deux, et il faudra surtout qu'Évie arrête de passer la note.
+1. **Réflexe :** quand un coup devrait toucher Évie, sa télékinésie le repousse avant qu'elle ne le sente.
+2. **Retour :** le coup ne disparaît pas. Il retombe sur quelqu'un de proche, ou lié à elle par un lien émotionnel. Le retour peut être physique (un bras cassé) ou intime (Émilie qui perd sa colère).
+3. **Usage volontaire :** elle peut aussi bouger des objets *exprès*. Chaque usage a un retour, plus faible mais réel.
+4. **Culpabilité :** plus elle se sent coupable, plus son pouvoir s'emballe (elle cherche à fuir ce qu'elle ressent), et plus les retours grossissent. C'est un cercle vicieux.
+5. **Le pacte ne tombe que si Évie accepte le coup :** baisser les mains, laisser la douleur la toucher, et que quelqu'un porte *avec* elle. Ni punition, ni contrainte.
+6. **Darius** porte *avec*. **Aubin** sait porter *seul*. Il faudra les deux, et surtout qu'Évie arrête de repousser.
 
 ---
 
@@ -59,7 +71,7 @@ Tome 3 : **Évie**, 11 ans, n'a jamais rien payé de sa vie. Tout ce qui devrait
 
 ### Évie Léopoldine Vasseur (11 ans) **[VALIDÉ : Évie]**
 - Née dans la nuit du 16 février 2026, à l'hôpital Bretonneau, la même nuit que la « mort » de Darius. Sa mère est morte en couches.
-- Brillante, souriante, bien élevée, un peu seule. Elle croit avoir de la chance.
+- Brillante, souriante, bien élevée, un peu seule. Elle croit avoir de la chance. En réalité, elle est **télékinésique** sans le savoir.
 - Elle dessine la maison de Fondettes. Elle a le deuxième prénom **Léopoldine**, qu'on ne découvre qu'au twist.
 - **Son arc :** de l'enfant protégée à celle qui choisit de payer.
 
@@ -117,21 +129,21 @@ Pour que le twist soit *juste* et pas *tricheur* :
 1. **LA PAGE QUI SE RÉÉCRIT** *(Émilie)* — Les jours après la porte. Émilie est calme, trop calme. Alex ne reconnaît plus sa sœur. Aubin, en passant, hume l'air : une odeur d'allumette. *Fin :* « Elle sent comme lui. »
 2. **PAGE 4 : LA NUIT DU SEIZE** *(flashback, 16 février 2026)* — Hôpital Bretonneau. Franck dans le couloir, sédaté. Ambroise Vasseur, au même étage, perd sa femme et gagne une fille qui ne respirait pas, puis respire. L'odeur d'une allumette qu'on éteint. *Fin :* « Elle s'appellera Évie. »
 3. **LE CANAPÉ D'AUBIN** *(Darius)* — Comédie de cohabitation : Aubin s'est installé chez Franck. Darius retourne à l'école à 15 ans parmi des enfants nés après lui. La porte 13 pulse. Il va voir Émilie : elle sourit, elle est aimable, elle est vide.
-4. **ÉVIE, ONZE ANS** *(Évie)* — Fondettes, le quotidien. Des feux verts, des profs absents, un gâteau qu'on lui garde. Elle dessine une fenêtre. Elle entend, la nuit, quelqu'un frapper. Elle trouve ça normal. *Fin :* un camarade se casse le bras le jour où elle gagne un concours.
+4. **ÉVIE, ONZE ANS** *(Évie)* — Fondettes, le quotidien. Un feu qui passe au vert, un vase qui s'arrête en plein vol, un gâteau qu'on lui garde. Elle appelle ça « avoir de la chance ». Elle dessine une fenêtre. Elle entend, la nuit, quelqu'un frapper. Elle trouve ça normal. *Fin :* un camarade se casse le bras le jour où elle gagne un concours.
 
 ### ACTE II — Le prix (ch. 5 à 8)
 
 5. **LA CARTE DE LA CHANCE** *(Clara, Alex)* — Ils reprennent la méthode du tome 2 à l'envers : cartographier la chance en région Centre-Val de Loire. Chaque « bonne nouvelle » a une victime à proximité. Tous les points convergent vers Fondettes. Lemaire explique : le Livre a **deux registres**.
 6. **PAGE 5 : MAMAN EST PARTIE** *(flashback, 2031)* — Évie, 5 ans. La première fois qu'on lui ment pour la protéger, et la première fois qu'elle sent que ce n'est pas vrai. Vasseur comprend le prix de la chance de sa fille. Il décide de tout rendre.
 7. **LA MAIN D'AUBIN** *(Aubin)* — L'odeur mène à **Émilie**. Aubin la prend pour la copie de Léopold. Pour la première fois, il est tenté de tuer par vengeance, pas par intérêt. Darius ressent tout. *Fin :* Darius l'arrête, de justesse. Aubin ment pour la première fois sans plaisir.
-8. **L'ENFANT QUI ESSAIE DE PERDRE** *(Évie)* — Elle fait des expériences. Elle voit le prix. Elle rencontre Odile, qui sait. Elle décide d'« arrêter d'avoir de la chance », et plus elle essaie, plus Émilie s'efface.
+8. **L'ENFANT QUI ESSAIE DE PERDRE** *(Évie)* — Elle fait des expériences : un crayon qui roule, une porte qui s'ouvre. Elle comprend que c'est **elle**. Chaque fois, quelqu'un, quelque part, trébuche. Elle voit le prix. Elle rencontre Odile, qui sait. Elle décide d'« arrêter d'avoir de la chance », et plus elle essaie, plus Émilie s'efface.
 
 ### ACTE III — La rencontre (ch. 9 à 13)
 
 9. **LA CONFESSION DE VASSEUR** *(Odile)* — Vasseur dit tout à Odile : sa fille, la lignée, le vrai but de la restitution. Odile comprend le piège et son rôle. *Fin :* « Il faut les amener ici avant son douzième anniversaire. »
-10. **LA MAISON DE FONDETTES** *(tous)* — Le groupe entre dans le jardin d'hiver. Émilie est presque effacée. **La rencontre** : Darius, Aubin, Évie. Twist n° 1 : c'est elle, sans le savoir, qui réécrit Émilie.
+10. **LA MAISON DE FONDETTES** *(tous)* — Le groupe entre dans le jardin d'hiver. Émilie est presque effacée. **La rencontre** : Darius, Aubin, Évie. Un réflexe d'Évie projette Aubin contre le mur : première preuve de la télékinésie. Twist n° 1 : c'est elle, sans le savoir, qui réécrit Émilie.
 11. **PAGE 6 : TREIZE ANS** *(flashback, 1894, Léopold)* — La nuit de la grange, vue par Léopold. Le vœu, le prix, le silence. Twist n° 2 : **le Lecteur, c'est lui**. Il a donné à Aubin « la mémoire de tous les autres » par culpabilité.
-12. **LE CHOIX D'ÉVIE** *(Évie, Darius, Aubin)* — Le Lecteur veut qu'Évie lui succède. Elle refuse : elle choisit de payer. Darius porte avec elle. Aubin, qui a le droit de se venger, fait autre chose : il *nomme* Léopold à voix haute. Le pacte se brise.
+12. **LE CHOIX D'ÉVIE** *(Évie, Darius, Aubin)* — Le Lecteur veut qu'Évie lui succède. Elle refuse et **baisse les mains** : onze ans de coups repoussés lui reviennent d'un coup, en une tempête d'objets. Darius porte avec elle. **Aubin se place devant elle**, lui qui devrait la haïr : il la protège comme il a protégé Darius, sans l'avoir décidé. Puis il *nomme* Léopold à voix haute. Le pacte se brise.
 13. **TREIZE** *(épilogue)* — Émilie retrouve sa colère et son prénom. Le dernier message du Livre. La révélation : **1 + 3 = 13**. Le nom du projet M.13 s'éclaire. Dernière image : trois portes, un banc, une pêche.
 
 ---
@@ -153,7 +165,8 @@ Pour que le twist soit *juste* et pas *tricheur* :
 1. **Le twist « Lecteur = Léopold » demande une explication nette** : comment une voix a-t-elle répondu à Aubin en 1894 si Léopold était vivant ? Ma réponse : le pacte a dédoublé Léopold (un corps qui vieillit, une voix qui tient le registre). Il faut la poser clairement au chapitre 11.
 2. **Le mécanisme du « coût déplacé »** doit rester simple. Si on le complique, le lecteur décroche.
 3. **Émilie ne doit pas devenir une victime passive.** Au chapitre 10, c'est elle qui fait le premier pas pour se reprendre.
-4. **Le tome 3 est plus sombre** que le tome 2 : un enfant coupable sans l'être. Garder l'humour d'Aubin pour respirer.
+4. **La télékinésie ne doit pas devenir un pouvoir de combat gratuit.** Chaque usage doit coûter à quelqu'un : c'est ce qui la rend dramatique.
+5. **Le tome 3 est plus sombre** que le tome 2 : un enfant coupable sans l'être. Garder l'humour d'Aubin pour respirer.
 
 ---
 
