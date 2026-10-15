@@ -62,7 +62,7 @@
 1. Le **ton** te va ? Plus court, plus de dialogues, plus d'humour que le tome 1.
 2. **Aubin** : assez drôle ? assez dangereux ?
 3. La **fin du chapitre 12** (« Je me souviens de toi ») : trop gentille, ou juste ?
-4. Tu veux un **tome 3** centré sur Émilie ?
+4. ~~Tome 3 centré sur Émilie ?~~ Réglé : faux indice, voir section 6.
 5. Tu veux que je **rallonge** le tome 2 (par exemple un chapitre sur Kayden, ou un flashback sur les deux premières copies) ?
 
 ---
@@ -83,4 +83,4 @@
 3. **Ch. 11** : la **porte 13** reste fermée, comme si quelqu'un la retenait de l'autre côté. Aubin la regarde puis détourne les yeux.
 4. **Ch. 13** : une petite fille traverse la place, le feu passe au vert pour elle, on sent **l'allumette éteinte**. Aubin baisse son journal pour la suivre des yeux.
 
-**Point à trancher :** la plaque finale du chapitre 12 dit « PAGE 1 — SUJET : ÉMILIE M. ». Trois options : la garder comme fausse piste, la changer en « PAGE 3 — SUJET : ? », ou la laisser floue.
+**Décision prise : FAUX INDICE.** La plaque finale du chapitre 12 (« PAGE 1 — SUJET : ÉMILIE M. ») reste telle quelle. Le lecteur croit que le tome 3 parle d'Émilie. Le vrai personnage du tome 3 est quelqu'un d'autre (voir ci-dessus). Émilie garde un rôle important (la porte, le point d'ancrage) mais n'est pas la narratrice principale.
