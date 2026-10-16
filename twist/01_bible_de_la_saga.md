@@ -18,7 +18,7 @@
 | 1 | La Page 404 (12 chapitres) | 1 | Porter **seul** une vérité sans la dire |
 | 2 | Les Pages Retirées (13 chapitres) | 2 | Porter **à deux** |
 | 3 | Les Pages Ajoutées (13 chapitres) | 3 | **Faire porter** aux autres |
-| 4 | À écrire | 4 (= 1 + 3) | **Tout payer** : Léopold réclame son dû |
+| 4 | Les Pages Effacées (13 chapitres, **rédigé**) | 4 (= 1 + 3) | **Tout payer** : Léopold réclame son dû |
 
 ### Tome 1 — Darius
 Chapitres : Miel · Celui qui porte son visage · Le grimoire et le bâton · Le Non-lieu en flammes · Le poids de s'en souvenir · La lignée de Darius · Le réseau · Le compte à rebours · La dernière porte · Ce qui continue de guetter · Le domaine Vasseur · La fin du monde.
@@ -53,6 +53,11 @@ C'est aussi la base du jeu (les 3 pouvoirs, l'instabilité, le glitch).
 - Fin : le serveur mère de M.13 exige une **empreinte d'âme**. Darius pose la main. *« Bienvenue chez M.13, Léopold. »* Il claque des doigts (suppression totale, comme Thanos) : **« Fin. »**
 - Dernière réplique du narrateur : **« Nous sommes Léopold. »**
 - Le détail des stades et des indices est dans `00_bible_du_twist.md`.
+
+### Tome 4 — Les Pages Effacées (écrit)
+- Février-mars 2040. Une « mise à jour » de M13 promet un retour à la normale via le **serveur mère**. Darius (18 ans) s'éloigne de lui-même à chaque page tournée (pages 7 à 12).
+- Dernière scène : sous les ruines de la grange Rivière, l'empreinte accepte Darius : « Bienvenue chez M.13, Léopold. » Il claque des doigts. **Fin.** Le narrateur, qui disait « on », dit : **« Nous sommes Léopold. »**
+- Indices semés dans les Tomes 2 et 3 : liste dans `semis_tomes_2_3.md`. Le Tome 1 n'a pas été retouché (il n'existe qu'en PDF).
 
 ## 5. Ce que le twist change dans l'existant (à trancher)
 

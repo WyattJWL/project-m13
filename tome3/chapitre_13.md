@@ -361,4 +361,3 @@ Il a quinze ans, un père, une mère, une amie de onze ans, un ennemi devenu que
 
 *— fin du chapitre 13 —*
 *— fin du tome 3 —*
-*— fin du tome 3 —*
