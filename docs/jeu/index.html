@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>PROJECT-M13 : le jeu</title>
+<meta name="description" content="Jeu navigateur tiré de la trilogie PROJECT-M13. Tome 1 : joue Darius en solo ou à plusieurs avec un code.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="glitch"></div>
+
+<!-- Menu -->
+<main id="menu" class="screen">
+  <h1>PROJECT<span>-M13</span></h1>
+  <p class="sub">Tome 1 · Le jeu</p>
+  <div class="card">
+    <button id="btn-solo" class="big">▶ Jouer en solo <small>Tu es Darius</small></button>
+    <button id="btn-host" class="big alt">👥 Créer un groupe <small>2 à 4 joueurs · tu reçois un code</small></button>
+    <div class="join">
+      <input id="join-code" maxlength="4" placeholder="CODE" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <button id="btn-join" class="alt">Rejoindre</button>
+    </div>
+    <p id="menu-error" class="error" role="alert"></p>
+  </div>
+  <p class="hint">Clavier : ZQSD / flèches · Espace = attaque · F = pouvoir · E = agir.<br>Téléphone : joystick et boutons à l'écran.</p>
+</main>
+
+<!-- Création du personnage (groupe) -->
+<main id="creator" class="screen hidden">
+  <h2>Ton personnage</h2>
+  <p class="sub">Un personnage qui n'est pas dans l'histoire.</p>
+  <div class="card">
+    <label>Nom
+      <input id="char-name" maxlength="16" placeholder="Ex : Zoé" autocomplete="off">
+    </label>
+    <div class="label">Pouvoir</div>
+    <div id="powers"></div>
+    <div class="label">Couleur</div>
+    <div id="colors"></div>
+    <p id="creator-error" class="error" role="alert"></p>
+    <div class="row">
+      <button id="btn-creator-back" class="alt">Retour</button>
+      <button id="btn-creator-ok" class="big">Valider</button>
+    </div>
+  </div>
+</main>
+
+<!-- Jeu -->
+<div id="hud" class="hidden">
+  <div id="hud-top">
+    <div class="bar"><div id="hp-fill"></div><span id="hp-text"></span></div>
+    <div class="bar inst"><div id="inst-fill"></div><span>Instabilité</span></div>
+    <div id="party"></div>
+  </div>
+  <div id="boss-bar" class="hidden"><div id="boss-fill"></div><span>Kayden</span></div>
+  <div id="toast"></div>
+  <div id="prompt" class="hidden">E · Agir</div>
+
+  <div id="dialogue" class="hidden">
+    <div id="dlg-speaker"></div>
+    <div id="dlg-text"></div>
+    <div id="dlg-choices"></div>
+    <button id="dlg-next">Continuer ▸</button>
+  </div>
+
+  <div id="touch">
+    <div id="stick"><div id="knob"></div></div>
+    <div id="buttons">
+      <button id="t-interact">Agir</button>
+      <button id="t-power">Pouvoir</button>
+      <button id="t-attack">Attaque</button>
+    </div>
+  </div>
+  <div id="power-info"></div>
+</div>
+
+<!-- Fin -->
+<main id="end" class="screen hidden">
+  <h2>Page 41 récupérée</h2>
+  <p class="sub">Fin du Tome 1. Le Tome 2 arrive.</p>
+  <div class="card"><button id="btn-again" class="big">Rejouer</button></div>
+</main>
+
+<script src="vendor/peerjs.min.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
