@@ -89,6 +89,8 @@ Il a la voix un peu étranglée.
 
 — Je suis le deux.
 
+Il cherche la suite de sa phrase, ne la trouve pas, et claque des doigts, pouce contre majeur, un petit bruit sec dans la salle de lecture, comme on appelle quelque chose qui devrait déjà être là. C'est la première fois. Personne ne le remarque, lui non plus.
+
 — Tu es le milieu, dit Alex. Comme toujours.
 
 — Ça veut dire quoi, ça ?
@@ -303,6 +305,16 @@ Il réfléchit.
 
 Il sourit.
 
+Évie le regarde un peu trop longtemps.
+
+— Moi, quand je lève les crayons, j'ai mal à la tête pendant deux heures. Toi, tu as retenu tout un couloir, et tu ne t'es jamais plaint.
+
+— Ça passe, dit Darius.
+
+— Quoi, ça ?
+
+Il ouvre la bouche, la referme, hausse les épaules. Elle ne dit rien. Elle range la remarque quelque part, dans le tiroir des choses qui ne s'expliquent pas encore.
+
 Dans la poche de son sweat, il y a un petit rectangle de papier plié en quatre. Un chien au feutre noir, une médaille, un numéro. Il l'a repris à Émilie, ce matin. Elle a dit : *garde-le, je m'en souviens.* Il a dit qu'il le lui prêterait de temps en temps.
 
 Il regarde les deux autres.
@@ -349,4 +361,4 @@ Il a quinze ans, un père, une mère, une amie de onze ans, un ennemi devenu que
 
 *— fin du chapitre 13 —*
 *— fin du tome 3 —*
-*— fin de la trilogie —*
+*— fin du tome 3 —*

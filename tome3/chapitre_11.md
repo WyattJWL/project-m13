@@ -333,6 +333,8 @@ Il y a, dans cette voix, une chose qui n'y était pas : une fêlure d'enfant. El
 
 Il y a un silence si long que Darius, derrière lui, sent son propre cœur cogner dans ses côtes.
 
+Une odeur d'allumette qu'on vient d'éteindre passe dans l'air. Darius tourne la tête vers Évie, persuadé que c'est elle, et la trouve en train de le regarder exactement de la même façon, avec la même certitude. Aucun des deux ne dit rien.
+
 Les lignes verticales commencent à se dissoudre sur les murs. Une à une, très lentement, comme du givre sous un souffle. Le bleu pâlit. Il reste une lueur douce, dorée, venue de nulle part, qui tombe sur la porte de fer.
 
 Sur le coffre, tout en haut, juste au bord, quelqu'un est assis.

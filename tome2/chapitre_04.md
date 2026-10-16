@@ -100,6 +100,10 @@ Il tape sur la vitre avec la paume. Il n'y a pas de bouton, pas de fente, pas de
 
 **OFFRE REFUSÉE.**
 
+Sous le texte, en bas de l'écran, une courte liste s'est allumée. Presque toutes les lignes sont claires. La dernière est grisée, à peine lisible, et personne ne la lit :
+
+*Suppression totale : réservée à l'administrateur.*
+
 Il frappe encore.
 
 **LA PAGE 0 N'A PAS DE PRIX.**

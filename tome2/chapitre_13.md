@@ -29,6 +29,8 @@ Darius ouvre la portière. L'air est froid, un peu humide, avec une odeur de pai
 
 Il la monte à pied.
 
+À mi-côte, le 4 s'arrête à sa hauteur, portes ouvertes, entre deux arrêts. Le chauffeur se penche. Darius lui dit qu'il n'a pas un centime, ni carte, ni rien, et l'homme hausse les épaules : « C'est déjà réglé, pour vous. » Darius pense à une panne de valideur, à un matin de bonne humeur, à de la chance, et fait signe que non, merci, il préfère marcher. Le bus repart, vide, comme s'il avait fait son travail.
+
 ---
 
 Un petit goût sucré lui effleure la langue, au milieu de la côte.
@@ -161,6 +163,10 @@ Il prend un billet. Un seul, celui du dessus.
 
 — Non. Je veux en acheter un. Moi. À la boulangerie. Avec toi.
 
+— Chez Maryse ? dit-elle.
+
+— Chez… commence-t-il, et il cherche. Il y est allé mille fois, il connaît la sonnette, l'odeur, la couleur du store. Le nom ne vient pas. Il vient une seconde plus tard, quand elle le redit sans y penser. Il rit, il dit que c'est la fatigue.
+
 Elle se tait. Il la voit comprendre. Elle a un petit mouvement du menton, un tremblement presque imperceptible, comme quelqu'un qui reçoit un cadeau en pleine figure.
 
 — Et le reste ? dit-elle.
@@ -245,7 +251,7 @@ Il se lève. Il glisse le billet de cinq euros dans la poche de son sweat. Il tr
 
 Il y a un petit goût de pêche dans l'air du palier.
 
-Il n'en dit rien à personne.
+Il n'en dit rien à personne. On n'en dira rien non plus : on connaît trop bien ce genre de palier, et ce que ça fait d'y rester un moment, avant qu'on vous ouvre.
 
 ---
 
