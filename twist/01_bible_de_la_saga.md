@@ -4,12 +4,12 @@
 
 ## 1. Quel est le tome de fin ?
 
-**Le Tome 3.** La saga s'arrête là, et il n'y a pas de Tome 4.
+**Le Tome 4.** Le Tome 3 se termine sur une fin presque heureuse. Le twist est gardé pour le Tome 4.
 
-- Le chiffre de la saga est **13 = « M. 1/3 »** : le Tome 1 et le Tome 3 forment le nom du projet.
-- Le Tome 2 est le « / » qui manque sur la machine à écrire : le sujet 2, celui qui « rend ».
-- Un Tome 4 n'a aucun sens dans ce code. Le chiffre 4 reste absent, et c'est une force : **la saga finit sur un numéro qui n'existe pas encore**.
-- La fin ouverte (la main sur l'empreinte, le claquement, « Fin ») clôt le livre sans fermer l'histoire.
+- **1 + 3 = 13** : le nom du projet, « M. 1/3 », est révélé à la fin du Tome 3.
+- **1 + 3 = 4** : l'addition des chiffres de 13 donne 4. Le Tome 4 est la somme de la saga.
+- **404** : la page introuvable du Tome 1 revient. Le Tome 4 est celui qui fait apparaître la page qu'on ne trouvait pas.
+- Le Tome 4 contient la fin ouverte : le serveur mère, l'empreinte, le claquement de doigts, « Fin », « Nous sommes Léopold ».
 
 ## 2. Les trois tomes
 
@@ -18,6 +18,7 @@
 | 1 | La Page 404 (12 chapitres) | 1 | Porter **seul** une vérité sans la dire |
 | 2 | Les Pages Retirées (13 chapitres) | 2 | Porter **à deux** |
 | 3 | Les Pages Ajoutées (13 chapitres) | 3 | **Faire porter** aux autres |
+| 4 | À écrire | 4 (= 1 + 3) | **Tout payer** : Léopold réclame son dû |
 
 ### Tome 1 — Darius
 Chapitres : Miel · Celui qui porte son visage · Le grimoire et le bâton · Le Non-lieu en flammes · Le poids de s'en souvenir · La lignée de Darius · Le réseau · Le compte à rebours · La dernière porte · Ce qui continue de guetter · Le domaine Vasseur · La fin du monde.
@@ -33,7 +34,7 @@ Chapitres : Miel · Celui qui porte son visage · Le grimoire et le bâton · Le
 ### Tome 3 — Évie
 - Évie, 11 ans, ne paie jamais rien : sa **télékinésie** repousse les coups, qui retombent sur quelqu'un d'autre (Émilie s'efface).
 - Révélations : Léopold a demandé « que ça ne me coûte rien » ; le Lecteur, c'est lui ; Évie est sa copie.
-- Fin actuelle : Évie baisse les mains, Aubin nomme Léopold, le pacte se brise. Épilogue : **1 + 3 = 13**, trois portes, un banc, une pêche.
+- Fin : Évie baisse les mains, Aubin nomme Léopold, le pacte se brise. Épilogue : **1 + 3 = 13**, trois portes, un banc, une pêche. Presque heureuse : le virus dans Darius reste invisible.
 
 ## 3. Le trio de pouvoirs
 
@@ -53,10 +54,10 @@ C'est aussi la base du jeu (les 3 pouvoirs, l'instabilité, le glitch).
 - Dernière réplique du narrateur : **« Nous sommes Léopold. »**
 - Le détail des stades et des indices est dans `00_bible_du_twist.md`.
 
-## 5. Ce que le twist casse dans l'existant (à trancher)
+## 5. Ce que le twist change dans l'existant (à trancher)
 
-1. **Tome 3, chapitre 12-13 : le pacte se brise.** Dans la version actuelle, nommer Léopold libère tout le monde. Pour que le twist tienne, il faut que cette victoire soit **partielle** : on brise le pacte d'Évie, mais le virus reste dans Darius. Le lecteur croit à une fin heureuse jusqu'à la scène finale.
-2. **Où placer la scène du serveur mère ?** Je propose une **coda après l'épilogue**, sans chapitre numéroté : on garde 13 chapitres (1 + 3 = 13), et la coda arrive comme une page « de trop ». *Alternative : remplacer la dernière image de l'épilogue.*
+1. **Tome 3 : on garde la fin heureuse.** Le pacte d'Évie se brise, Émilie retrouve sa colère, 1 + 3 = 13. On ajoute seulement quelques graines (voir le plan), sans changer le sens de la fin.
+2. **Tome 4 : tout le twist.** Il faut un plan complet du Tome 4 : le virus qui avance, la quête du serveur mère, l'empreinte, la scène finale. C'est la prochaine grande étape.
 3. **Le Lecteur « mort en 1953 » :** il faut une règle claire. Mon idée : la voix est un fragment, et le corps de Darius est le fragment principal.
 4. **Évie, copie de Léopold :** elle reste une copie, donc une partie de lui. Ça rend « Nous » plus fort : elle est dans le « nous ».
 5. **Le narrateur du Tome 1 et 2 :** relecture à faire pour y glisser quelques « on » qui deviennent « nous » à la toute fin.
@@ -64,15 +65,15 @@ C'est aussi la base du jeu (les 3 pouvoirs, l'instabilité, le glitch).
 
 ## 6. Planning de réécriture (après validation)
 
-1. Retouches légères du Tome 1 : allumette, phrase « suppression totale », un « nous » discret.
-2. Tome 2 : indices (trous de mémoire, le « non » à « qui paiera ? »), retouche de la fin du chapitre 12.
-3. Tome 3 : indices, le chapitre 12-13 rendu partiel, la coda finale.
-4. Régénération des PDF et du PDF unique de la trilogie.
+1. Plan du Tome 4 (à valider).
+2. Retouches légères des Tomes 1, 2 et 3 : allumette, « suppression totale », trous de mémoire de Darius, un « nous » discret.
+3. Rédaction du Tome 4.
+4. Régénération des PDF et du PDF unique de la saga.
 5. Adaptation du jeu quand tout sera stable.
 
 ## 7. Décisions à prendre
 
-1. Coda après l'épilogue (mon choix) ou fin de l'épilogue remplacée ?
+1. Le Tome 4 commence tout de suite après le Tome 3, ou plusieurs années plus tard ?
 2. Le nombre de fragments, et où ils sont cachés ?
 3. Le rôle d'Aubin dans le plan de Léopold : manipulé ou complice ?
 4. Qui sait quoi à la fin : Évie, Clara, Alex ?
