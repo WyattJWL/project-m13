@@ -1,0 +1,79 @@
+# Bible de la saga PROJECT-M13
+
+*Vue d'ensemble des trois tomes, du twist et des décisions encore ouvertes. Document de travail.*
+
+## 1. Quel est le tome de fin ?
+
+**Le Tome 3.** La saga s'arrête là, et il n'y a pas de Tome 4.
+
+- Le chiffre de la saga est **13 = « M. 1/3 »** : le Tome 1 et le Tome 3 forment le nom du projet.
+- Le Tome 2 est le « / » qui manque sur la machine à écrire : le sujet 2, celui qui « rend ».
+- Un Tome 4 n'a aucun sens dans ce code. Le chiffre 4 reste absent, et c'est une force : **la saga finit sur un numéro qui n'existe pas encore**.
+- La fin ouverte (la main sur l'empreinte, le claquement, « Fin ») clôt le livre sans fermer l'histoire.
+
+## 2. Les trois tomes
+
+| Tome | Titre | Chiffre | Thème |
+|---|---|---|---|
+| 1 | La Page 404 (12 chapitres) | 1 | Porter **seul** une vérité sans la dire |
+| 2 | Les Pages Retirées (13 chapitres) | 2 | Porter **à deux** |
+| 3 | Les Pages Ajoutées (13 chapitres) | 3 | **Faire porter** aux autres |
+
+### Tome 1 — Darius
+Chapitres : Miel · Celui qui porte son visage · Le grimoire et le bâton · Le Non-lieu en flammes · Le poids de s'en souvenir · La lignée de Darius · Le réseau · Le compte à rebours · La dernière porte · Ce qui continue de guetter · Le domaine Vasseur · La fin du monde.
+- Un distributeur à Luynes rend des objets perdus contre « une année » de souvenirs. Darius, 14 ans, découvre que les mensonges qui l'entourent ont un coût.
+- Il traverse le Non-lieu et la porte 41, et affronte Kayden.
+- Fin : « officiellement mort », et la voix inconnue dit : **« Commençons la fin du monde. »**
+
+### Tome 2 — Darius et Aubin
+- 11 ans plus tard (2037). Aubin Delorme, garçon de la cave de 1894, est lié à Darius : sensations, douleur, émotions. Il le protège pour être le seul à pouvoir le tuer.
+- Les clés : Émilie (la porte 0), Vasseur et sa « restitution », la tombe, la cave, la page 3 (1962).
+- Fin : Aubin demandait « que quelqu'un se souvienne de moi » ; le Lecteur lui a donné « la mémoire de tous les autres ». Darius remplit enfin le vœu : « Je me souviens de toi. » La clause « l'un tue l'autre » tombe.
+
+### Tome 3 — Évie
+- Évie, 11 ans, ne paie jamais rien : sa **télékinésie** repousse les coups, qui retombent sur quelqu'un d'autre (Émilie s'efface).
+- Révélations : Léopold a demandé « que ça ne me coûte rien » ; le Lecteur, c'est lui ; Évie est sa copie.
+- Fin actuelle : Évie baisse les mains, Aubin nomme Léopold, le pacte se brise. Épilogue : **1 + 3 = 13**, trois portes, un banc, une pêche.
+
+## 3. Le trio de pouvoirs
+
+| Personnage | Don | Verbe |
+|---|---|---|
+| Aubin | Garder la mémoire des autres | Retenir |
+| Darius | Rendre la vérité avec la chaleur qu'il faut | Rendre |
+| Évie | Télékinésie | Repousser |
+
+C'est aussi la base du jeu (les 3 pouvoirs, l'instabilité, le glitch).
+
+## 4. Le twist : « Nous sommes Léopold »
+
+- Le fragment principal de l'âme de Léopold est dans **Darius**. Un virus d'âme : plus Darius utilise ses pouvoirs, et plus les lecteurs tournent de pages, plus il devient Léopold.
+- Le narrateur de la saga est le Lecteur, donc Léopold.
+- Fin : le serveur mère de M.13 exige une **empreinte d'âme**. Darius pose la main. *« Bienvenue chez M.13, Léopold. »* Il claque des doigts (suppression totale, comme Thanos) : **« Fin. »**
+- Dernière réplique du narrateur : **« Nous sommes Léopold. »**
+- Le détail des stades et des indices est dans `00_bible_du_twist.md`.
+
+## 5. Ce que le twist casse dans l'existant (à trancher)
+
+1. **Tome 3, chapitre 12-13 : le pacte se brise.** Dans la version actuelle, nommer Léopold libère tout le monde. Pour que le twist tienne, il faut que cette victoire soit **partielle** : on brise le pacte d'Évie, mais le virus reste dans Darius. Le lecteur croit à une fin heureuse jusqu'à la scène finale.
+2. **Où placer la scène du serveur mère ?** Je propose une **coda après l'épilogue**, sans chapitre numéroté : on garde 13 chapitres (1 + 3 = 13), et la coda arrive comme une page « de trop ». *Alternative : remplacer la dernière image de l'épilogue.*
+3. **Le Lecteur « mort en 1953 » :** il faut une règle claire. Mon idée : la voix est un fragment, et le corps de Darius est le fragment principal.
+4. **Évie, copie de Léopold :** elle reste une copie, donc une partie de lui. Ça rend « Nous » plus fort : elle est dans le « nous ».
+5. **Le narrateur du Tome 1 et 2 :** relecture à faire pour y glisser quelques « on » qui deviennent « nous » à la toute fin.
+6. **Le Tome 1 est un cas à part :** la voix inconnue qui dit « Commençons la fin du monde » devient Léopold qui s'annonce. À confirmer.
+
+## 6. Planning de réécriture (après validation)
+
+1. Retouches légères du Tome 1 : allumette, phrase « suppression totale », un « nous » discret.
+2. Tome 2 : indices (trous de mémoire, le « non » à « qui paiera ? »), retouche de la fin du chapitre 12.
+3. Tome 3 : indices, le chapitre 12-13 rendu partiel, la coda finale.
+4. Régénération des PDF et du PDF unique de la trilogie.
+5. Adaptation du jeu quand tout sera stable.
+
+## 7. Décisions à prendre
+
+1. Coda après l'épilogue (mon choix) ou fin de l'épilogue remplacée ?
+2. Le nombre de fragments, et où ils sont cachés ?
+3. Le rôle d'Aubin dans le plan de Léopold : manipulé ou complice ?
+4. Qui sait quoi à la fin : Évie, Clara, Alex ?
+5. Le Tome 1 : on y touche, oui ou non ?
