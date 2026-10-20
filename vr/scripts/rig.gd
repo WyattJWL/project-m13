@@ -19,6 +19,7 @@ var movement_enabled := false
 var telekinesis_enabled := true
 var held: Dictionary = {}       # XRController3D -> RigidBody3D tenu à distance
 var hold_dist: Dictionary = {}
+var in_hand: Dictionary = {}    # XRController3D -> true quand l'objet a été ramené dans la main
 var hand_prev: Dictionary = {}
 var hand_vel: Dictionary = {}
 var ui_enabled := true
@@ -138,7 +139,7 @@ func _on_button(name: String, hand: XRController3D) -> void:
 	match name:
 		"trigger_click":
 			if held.has(hand):
-				_launch(hand)
+				_pull_to_hand(hand)
 				return
 			var target = hover.get(hand)
 			if ui_enabled and target and is_instance_valid(target):
@@ -180,27 +181,30 @@ func _try_telekinesis(hand: XRController3D) -> bool:
 	telekinesis_grab.emit(body)
 	return true
 
-func _drop(hand: XRController3D, launch: bool) -> void:
+func _drop(hand: XRController3D, _unused: bool) -> void:
 	var body: RigidBody3D = held.get(hand)
 	held.erase(hand)
 	hold_dist.erase(hand)
+	in_hand.erase(hand)
 	if body == null or not is_instance_valid(body):
 		return
 	body.gravity_scale = 1.0
 	body.linear_damp = 0.1
 	body.angular_damp = 0.5
-	if launch:
-		var forward := -hand.global_basis.z
-		body.linear_velocity = forward * 16.0
+	# Lancer : on lâche GRIP en faisant un mouvement de la main, l'objet part avec sa vitesse.
+	var v: Vector3 = (hand_vel.get(hand, Vector3.ZERO) as Vector3) * 2.0
+	body.linear_velocity = v
+	if v.length() > 2.0:
 		body.angular_velocity = Vector3(randf_range(-4, 4), randf_range(-4, 4), randf_range(-4, 4))
-		_haptic(hand, 1.0)
+		_haptic(hand, 0.8)
 		telekinesis_launch.emit(body)
-	else:
-		# lâcher en mouvement = jeter avec la vitesse de la main
-		body.linear_velocity = (hand_vel.get(hand, Vector3.ZERO) as Vector3) * 1.8
 
-func _launch(hand: XRController3D) -> void:
-	_drop(hand, true)
+# GÂCHETTE pendant qu'on retient un objet à distance : il vient se coller dans la main.
+func _pull_to_hand(hand: XRController3D) -> void:
+	if in_hand.has(hand):
+		return
+	in_hand[hand] = true
+	_haptic(hand, 0.5)
 
 func _update_telekinesis(delta: float) -> void:
 	for hand in hands:
@@ -215,12 +219,11 @@ func _update_telekinesis(delta: float) -> void:
 		if not is_instance_valid(body):
 			held.erase(hand)
 			continue
-		# stick vers l'avant = éloigner, vers l'arrière = rapprocher
-		var stick := hand.get_vector2("primary")
-		if absf(stick.y) > 0.2:
-			hold_dist[hand] = clampf(hold_dist[hand] + stick.y * 4.0 * delta, 0.5, 14.0)
-		var target := pos + (-hand.global_basis.z) * float(hold_dist[hand])
-		body.linear_velocity = ((target - body.global_position) * 12.0).limit_length(25.0)
+		# Retenu de loin : l'objet garde sa distance. Après GÂCHETTE : il est dans la main.
+		var dist: float = 0.14 if in_hand.has(hand) else float(hold_dist[hand])
+		var target := pos + (-hand.global_basis.z) * dist
+		var gain := 22.0 if in_hand.has(hand) else 12.0
+		body.linear_velocity = ((target - body.global_position) * gain).limit_length(30.0)
 		body.angular_velocity = body.angular_velocity.lerp(Vector3.ZERO, 0.1)
 		(beams[hand].material_override as StandardMaterial3D).emission = Color(1.0, 0.45, 0.9)
 

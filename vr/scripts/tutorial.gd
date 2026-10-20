@@ -35,7 +35,7 @@ const STEPS := [
 	{"title": "TOURNER", "text": ""},
 	{"title": "ATTRAPER", "text": "Approche une main de la page lumineuse\net maintiens le bouton GRIP pour l'attraper."},
 	{"title": "LIRE", "text": "Amene la page pres de ton visage\npour la lire."},
-	{"title": "TELEKINESIE", "text": "Vise une caisse avec le laser et maintiens GRIP :\nelle flotte. Bouge la main pour la deplacer,\nle stick avant/arriere pour l'eloigner / rapprocher.\nGACHETTE = la lancer. Touche la cible bleue !"},
+	{"title": "TELEKINESIE", "text": "Vise une caisse de loin et MAINTIENS GRIP :\nelle flotte, a la meme distance. GACHETTE = elle\nvient dans ta main. Pour la lancer : fais un\nmouvement de la main et LACHE GRIP. Touche la cible !"},
 	{"title": "LE POUVOIR : RETENIR", "text": "Appuie sur A (main droite).\nPendant 5 secondes, tu es protege.\nRecharge : 12 secondes."},
 	{"title": "FUIR", "text": "Une Silhouette arrive. Elle t'arrache un souvenir\nsi elle te touche. Utilise RETENIR (A) ou recule.\nTiens 20 secondes."},
 	{"title": "TUTORIEL TERMINE", "text": "Tu es pret. Le Non-lieu t'attend."}
