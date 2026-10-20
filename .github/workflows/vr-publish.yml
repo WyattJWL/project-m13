@@ -33,15 +33,19 @@ jobs:
           chmod +x /tmp/ovr-platform-util
           /tmp/ovr-platform-util version || /tmp/ovr-platform-util help | head -5
 
-      - name: Envoyer le build (canal LIVE, sinon ALPHA)
+      - name: Envoyer le build (LIVE puis ALPHA ; clé secrète puis token utilisateur)
         env:
           APP_SECRET: ${{ secrets.META_APP_SECRET }}
           USER_TOKEN: ${{ secrets.META_USER_TOKEN }}
         run: |
-          if [ -n "$APP_SECRET" ]; then AUTH="--app_secret $APP_SECRET"; elif [ -n "$USER_TOKEN" ]; then AUTH="--token $USER_TOKEN"; else echo "Aucun secret Meta"; exit 1; fi
-          for CH in LIVE ALPHA; do
-            echo "=== canal $CH ==="
-            if /tmp/ovr-platform-util upload-quest-build --app_id "$META_APP_ID" $AUTH --apk /tmp/rel/project-m13-vr-release.apk --channel "$CH" 2>&1 | sed -E "s/(secret|token)[= ][^ ]+/\1=***/Ig"; then
-              [ "${PIPESTATUS[0]}" = "0" ] && break
-            fi
+          mask() { sed -E "s/(secret|token)[= ][^ ]+/\1=***/Ig"; }
+          echo "longueurs : secret=${#APP_SECRET} token=${#USER_TOKEN}"
+          for MODE in secret token; do
+            if [ "$MODE" = "secret" ]; then [ -n "$APP_SECRET" ] || continue; AUTH=(--app_secret "$APP_SECRET"); else [ -n "$USER_TOKEN" ] || continue; AUTH=(--token "$USER_TOKEN"); fi
+            for CH in LIVE ALPHA; do
+              echo "=== $MODE / canal $CH ==="
+              /tmp/ovr-platform-util upload-quest-build --app_id "$META_APP_ID" "${AUTH[@]}" --apk /tmp/rel/project-m13-vr-release.apk --channel "$CH" 2>&1 | mask | tee /tmp/out.txt
+              if grep -qiE "success|uploaded" /tmp/out.txt && ! grep -qi "error" /tmp/out.txt; then echo "ENVOYE"; exit 0; fi
+            done
           done
+          echo "Echec de l'envoi."; exit 1
