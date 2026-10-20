@@ -4,6 +4,9 @@ name: Build VR APK (release)
 
 on:
   workflow_dispatch:
+  push:
+    branches: ["claude/m13-second-book-**"]
+    paths: ["vr/RELEASE_TRIGGER"]
 
 env:
   GODOT_VERSION: "4.6"
