@@ -65,6 +65,15 @@ jobs:
         working-directory: vr
         run: godot --headless --import || true
 
+      - name: Vérifier les scripts (erreurs de syntaxe)
+        working-directory: vr
+        run: |
+          FAIL=0
+          for f in scripts/*.gd; do
+            OUT=$(godot --headless --path . --check-only --script "res://$f" 2>&1) || { echo "=== $f ==="; echo "$OUT" | grep -E "ERROR|Error|error" | head -8; FAIL=1; }
+          done
+          exit $FAIL
+
       - name: Exporter l'APK
         working-directory: vr
         env:
