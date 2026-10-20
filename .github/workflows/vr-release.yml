@@ -80,6 +80,9 @@ jobs:
           if [ -z "$KS_B64" ] || [ -z "$KS_PASS" ]; then echo "Secrets VR_KEYSTORE_B64 / VR_KEYSTORE_PASSWORD manquants (voir vr/STORE.md)."; exit 1; fi
           echo "$KS_B64" | base64 -d > /tmp/release.keystore
 
+      - name: Numéro de version (augmente à chaque build)
+        run: sed -i "s/^version\/code=.*/version\/code=$((GITHUB_RUN_NUMBER + 10))/" vr/export_presets.cfg && grep -n '^version/' vr/export_presets.cfg
+
       - name: Importer le projet
         working-directory: vr
         run: godot --headless --import || true

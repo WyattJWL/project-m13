@@ -45,8 +45,12 @@ jobs:
             if [ "$MODE" = "secret" ]; then [ -n "$APP_SECRET" ] || continue; AUTH=(--app_secret "$APP_SECRET"); else [ -n "$USER_TOKEN" ] || continue; AUTH=(--token "$USER_TOKEN"); fi
             for CH in LIVE ALPHA; do
               echo "=== $MODE / canal $CH ==="
-              /tmp/ovr-platform-util upload-quest-build --app_id "$META_APP_ID" "${AUTH[@]}" --apk /tmp/rel/project-m13-vr-release.apk --channel "$CH" 2>&1 | mask | tee /tmp/out.txt
-              if grep -qiE "success|uploaded" /tmp/out.txt && ! grep -qi "error" /tmp/out.txt; then echo "ENVOYE"; exit 0; fi
+              set +e
+              /tmp/ovr-platform-util upload-quest-build --app_id "$META_APP_ID" "${AUTH[@]}" --apk /tmp/rel/project-m13-vr-release.apk --channel "$CH" > /tmp/out.txt 2>&1
+              CODE=$?
+              set -e
+              mask < /tmp/out.txt
+              if [ "$CODE" = "0" ]; then echo "ENVOYE sur le canal $CH"; exit 0; fi
             done
           done
           echo "Echec de l'envoi."; exit 1
