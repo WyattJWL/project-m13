@@ -3,7 +3,7 @@ extends Node
 
 const PATH := "user://settings.cfg"
 
-var move_mode := "teleport"   # "teleport" (confortable) ou "smooth"
+var move_mode := "smooth"     # "smooth" (par défaut) ou "teleport"
 var turn_mode := "snap"       # "snap" (par crans) ou "smooth"
 var snap_degrees := 30.0
 var vignette := true          # assombrit les bords pendant les déplacements

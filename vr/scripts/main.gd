@@ -5,6 +5,7 @@ const Rig := preload("res://scripts/rig.gd")
 const MenuScript := preload("res://scripts/menu.gd")
 const TutorialScript := preload("res://scripts/tutorial.gd")
 const World := preload("res://scripts/world.gd")
+const Props := preload("res://scripts/props.gd")
 const Button3D := preload("res://scripts/button3d.gd")
 
 var xr_interface: XRInterface
@@ -30,6 +31,11 @@ func _swap(new_scene: Node3D) -> void:
 	scene = new_scene
 	add_child(scene)
 	rig.recenter_to(scene.spawn_point(), 0.0)
+	# Le suivi de la tête n'est pas toujours prêt à la première image : on recale juste après.
+	var sc := scene
+	await get_tree().create_timer(0.6).timeout
+	if scene == sc:
+		rig.recenter_to(sc.spawn_point(), 0.0)
 
 func show_menu() -> void:
 	rig.movement_enabled = false
@@ -56,15 +62,16 @@ func show_tutorial() -> void:
 func show_chapter_placeholder() -> void:
 	# Le chapitre 1 arrive dans la prochaine version.
 	var s := Node3D.new()
-	World.environment(s, Color(0.02, 0.03, 0.07), Color(0.2, 0.25, 0.4), 0.05)
-	var floor_body := World.box(s, Vector3(0, -0.05, 0), Vector3(30, 0.1, 30), Color(0.05, 0.06, 0.1), 0.0, true)
-	floor_body.name = "Floor"
-	World.blue_lines(s, Vector3.ZERO, 8.0, 24, 8.0)
-	World.label(s, "CHAPITRE 1 : MIEL", Vector3(0, 2.4, -2.2), 0.01, Color(1, 1, 1), 80)
-	World.label(s, "Jeudi de novembre. Il pleut sur Luynes.\n\nA suivre dans la prochaine version.", Vector3(0, 1.7, -2.2), 0.005, Color(0.75, 0.82, 0.95), 64)
+	Props.night_env(s)
+	Props.ground(s)
+	Props.forest(s, 21, 150, Rect2(-40, -45, 80, 65), [Rect2(-8, -8, 16, 14)])
+	Props.lantern(s, Vector3(-2.5, 0, -1.0), Color(1.0, 0.72, 0.38))
+	World.blue_lines(s, Vector3(0, 0, -5), 11.0, 12, 9.0)
+	World.label(s, "CHAPITRE 1 : MIEL", Vector3(0, 2.4, -3.2), 0.01, Color(1, 1, 1), 80)
+	World.label(s, "Jeudi de novembre. Il pleut sur Luynes.\n\nA suivre dans la prochaine version.", Vector3(0, 1.7, -3.2), 0.005, Color(0.75, 0.82, 0.95), 64)
 	var b := Button3D.new()
 	b.text = "RETOUR"
-	b.position = Vector3(0, 1.0, -2.0)
+	b.position = Vector3(0, 1.0, -3.0)
 	s.add_child(b)
 	b.pressed.connect(show_menu)
 	_swap_plain(s)

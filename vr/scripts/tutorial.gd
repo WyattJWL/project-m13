@@ -1,174 +1,300 @@
 extends Node3D
-# Tutoriel : apprendre à regarder, bouger, tourner, attraper, lire, utiliser le pouvoir « Retenir »,
-# puis échapper à une Silhouette. Chaque étape se valide toute seule.
+# Tutoriel dans la forêt : on avance le long d'un chemin et Darius commente chaque étape.
+# Les consignes s'affichent dans un bandeau qui suit doucement le regard (un seul message à la fois).
 
 signal finished
 
 const World := preload("res://scripts/world.gd")
+const Props := preload("res://scripts/props.gd")
 const Button3D := preload("res://scripts/button3d.gd")
 
 var rig
-var panel_title: Label3D
-var panel_text: Label3D
-var panel_step: Label3D
-var step := -1
-var step_time := 0.0
-var start_yaw := 0.0
-var start_pos := Vector3.ZERO
-var start_rig_yaw := 0.0
+var hud: Node3D
+var obj_label: Label3D
+var talk_label: Label3D
+var hint_label: Label3D
+var speaker_label: Label3D
+var held_page := false
 var page: Node3D
 var held_by: XRController3D = null
-var page_read := false
-var silhouette: Node3D
-var hit_count := 0
-var survive := 0.0
-var done_button: Node
-var _powered := false
-var _reading := false
-var target_hit := false
 var crates: Array[RigidBody3D] = []
-var _flash: OmniLight3D
-
-const STEPS := [
-	{"title": "REGARDER", "text": "Tourne la tete pour regarder autour de toi.\nDeux lignes bleues t'attendent derriere."},
-	{"title": "SE DEPLACER", "text": ""},
-	{"title": "TOURNER", "text": ""},
-	{"title": "ATTRAPER", "text": "Approche une main de la page lumineuse\net maintiens le bouton GRIP pour l'attraper."},
-	{"title": "LIRE", "text": "Amene la page pres de ton visage\npour la lire."},
-	{"title": "TELEKINESIE", "text": "Vise une caisse de loin et MAINTIENS GRIP :\nelle flotte, a la meme distance. GACHETTE = elle\nvient dans ta main. Pour la lancer : fais un\nmouvement de la main et LACHE GRIP. Touche la cible !"},
-	{"title": "LE POUVOIR : RETENIR", "text": "Appuie sur A (main droite).\nPendant 5 secondes, tu es protege.\nRecharge : 12 secondes."},
-	{"title": "FUIR", "text": "Une Silhouette arrive. Elle t'arrache un souvenir\nsi elle te touche. Utilise RETENIR (A) ou recule.\nTiens 20 secondes."},
-	{"title": "TUTORIEL TERMINE", "text": "Tu es pret. Le Non-lieu t'attend."}
-]
+var target_area: Area3D
+var target_hit := false
+var tk_grabbed := false
+var tk_pulled := false
+var powered := false
+var silhouette: Node3D
+var survive_left := 0.0
+var hits := 0
+var light: OmniLight3D
+var _alive := true
 
 func _ready() -> void:
-	World.environment(self, Color(0.82, 0.86, 0.96), Color(0.75, 0.8, 0.95), 0.015)
-	var floor_body := World.box(self, Vector3(0, -0.05, 0), Vector3(40, 0.1, 40), Color(0.86, 0.88, 0.95), 0.0, true)
-	floor_body.name = "Floor"
-	for x in range(-20, 21, 4):
-		World.box(self, Vector3(x, 0.001, 0), Vector3(0.03, 0.01, 40), Color(0.6, 0.65, 0.8))
-		World.box(self, Vector3(0, 0.001, x), Vector3(40, 0.01, 0.03), Color(0.6, 0.65, 0.8))
-	World.blue_lines(self, Vector3.ZERO, 14.0, 36, 9.0)
-	World.light(self, Vector3(0, 4.0, 0), Color(0.9, 0.95, 1.0), 2.2, 18.0)
-	_flash = World.light(self, Vector3(0, 1.5, 0), Color(0.3, 0.6, 1.0), 0.0, 6.0)
-	# Panneau d'instructions, devant le joueur
-	var panel := Node3D.new()
-	panel.position = Vector3(0, 1.7, -2.4)
-	add_child(panel)
-	World.box(panel, Vector3(0, 0, -0.03), Vector3(2.4, 1.25, 0.04), Color(0.04, 0.05, 0.1), 0.0)
-	panel_step = World.label(panel, "", Vector3(0, 0.5, 0), 0.004, Color(0.5, 0.75, 1.0), 56)
-	panel_title = World.label(panel, "", Vector3(0, 0.3, 0), 0.007, Color(1, 1, 1), 80)
-	panel_text = World.label(panel, "", Vector3(0, -0.15, 0), 0.0042, Color(0.85, 0.9, 1.0), 56)
-	# La page (objet à attraper)
-	page = Node3D.new()
-	page.position = Vector3(0.7, 1.15, -1.3)
-	page.visible = false
+	Props.night_env(self)
+	Props.ground(self)
+	Props.path(self, 6.0, -48.0, 3.2)
+	var clear: Array = [Rect2(-3.0, -48.0, 6.0, 56.0), Rect2(-9.0, -30.0, 18.0, 16.0)]
+	Props.forest(self, 7, 170, Rect2(-45, -75, 90, 95), clear)
+	Props.grass(self, 11, 500, Rect2(-14, -42, 28, 52), [Rect2(-1.4, -48.0, 2.8, 56.0)])
+	Props.rocks(self, 5, 28, Rect2(-30, -60, 60, 70), [Rect2(-3.0, -48.0, 6.0, 56.0)])
+	# lanternes le long du chemin
+	for i in 6:
+		Props.lantern(self, Vector3(1.9 if i % 2 == 0 else -1.9, 0, 2.0 - i * 7.0), Color(1.0, 0.72, 0.38), i % 2 == 0)
+	# balise bleue (premier but)
+	light = World.light(self, Vector3(0, 2.0, -9.0), Color(0.3, 0.6, 1.0), 2.4, 9.0)
+	World.box(self, Vector3(0, 2.0, -9.0), Vector3(0.12, 4.0, 0.12), Color(0.35, 0.7, 1.0), 4.0)
+	Props.standing_stone(self, Vector3(7.0, 0, -9.5), deg_to_rad(-70))
+	Props.stump(self, Vector3(-2.2, 0, -10.0))
+	_build_hud()
+
+func spawn_point() -> Vector3:
+	return Vector3(0, 0, 2.5)
+
+# ---------- Bandeau d'instructions (suit la tête avec un léger retard) ----------
+func _build_hud() -> void:
+	hud = Node3D.new()
+	hud.top_level = true
+	add_child(hud)
+	var back := MeshInstance3D.new()
+	var qm := QuadMesh.new()
+	qm.size = Vector2(1.7, 0.62)
+	back.mesh = qm
+	var m := StandardMaterial3D.new()
+	m.albedo_color = Color(0.02, 0.03, 0.07, 0.72)
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	back.material_override = m
+	back.position.z = -0.01
+	hud.add_child(back)
+	obj_label = _hud_label(Vector3(0, 0.25, 0), 36, Color(0.5, 0.78, 1.0), true)
+	speaker_label = _hud_label(Vector3(-0.78, 0.14, 0), 34, Color(1.0, 0.8, 0.45), false)
+	talk_label = _hud_label(Vector3(-0.78, 0.07, 0), 42, Color.WHITE, false)
+	talk_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	hint_label = _hud_label(Vector3(0, -0.24, 0), 34, Color(0.6, 0.95, 0.7), true)
+
+func _hud_label(pos: Vector3, size: int, color: Color, centered: bool) -> Label3D:
+	var l := Label3D.new()
+	l.position = pos
+	l.font_size = size
+	l.pixel_size = 0.0014
+	l.modulate = color
+	l.outline_size = 8
+	l.width = 1100
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if centered else HORIZONTAL_ALIGNMENT_LEFT
+	l.vertical_alignment = VERTICAL_ALIGNMENT_TOP if not centered else VERTICAL_ALIGNMENT_CENTER
+	hud.add_child(l)
+	return l
+
+func _process(delta: float) -> void:
+	if rig == null or not is_instance_valid(hud):
+		return
+	var cam: XRCamera3D = rig.cam
+	var yaw := cam.global_rotation.y
+	var forward := Vector3(-sin(yaw), 0, -cos(yaw))
+	var goal := cam.global_position + forward * 1.5 + Vector3(0, -0.45, 0)
+	hud.global_position = hud.global_position.lerp(goal, clampf(delta * 3.0, 0.0, 1.0))
+	var cur := hud.global_rotation.y
+	hud.global_rotation = Vector3(0, lerp_angle(cur, yaw, clampf(delta * 3.0, 0.0, 1.0)), 0)
+
+func _set_objective(t: String) -> void:
+	obj_label.text = "OBJECTIF : " + t if t != "" else ""
+
+func _hint(t: String) -> void:
+	hint_label.text = t
+
+# Une réplique : le texte s'écrit, puis on attend un peu (durée selon la longueur).
+func _say(who: String, text: String) -> void:
+	speaker_label.text = who.to_upper()
+	talk_label.text = text
+	talk_label.visible_characters = 0
+	for i in text.length():
+		if not _alive:
+			return
+		talk_label.visible_characters = i + 1
+		await get_tree().create_timer(0.025).timeout
+	await get_tree().create_timer(1.4 + text.length() * 0.035).timeout
+
+func _wait(cond: Callable, timeout := 600.0) -> void:
+	var t := 0.0
+	while _alive and not cond.call() and t < timeout:
+		await get_tree().process_frame
+		t += get_process_delta_time()
+
+func _flat_dist(a: Vector3, b: Vector3) -> float:
+	return Vector2(a.x - b.x, a.z - b.z).length()
+
+# ---------- Déroulement ----------
+func begin(player_rig) -> void:
+	rig = player_rig
+	rig.movement_enabled = true
+	rig.power_used.connect(func(): powered = true)
+	rig.grabbed.connect(_on_grab)
+	rig.released.connect(_on_release)
+	rig.telekinesis_grab.connect(func(_b): tk_grabbed = true)
+	rig.telekinesis_pulled.connect(func(_b): tk_pulled = true)
+	_run()
+
+func _run() -> void:
+	# 1. Regarder
+	_set_objective("regarde autour de toi")
+	await _say("Darius", "... Où suis-je ? Cette forêt, je ne l'ai jamais vue.")
+	_hint("Tourne la tête pour regarder autour de toi.")
+	var yaw0: float = rig.head_yaw()
+	await _wait(func(): return absf(angle_difference(yaw0, rig.head_yaw())) > deg_to_rad(60.0))
+	# 2. Avancer
+	_set_objective("avance jusqu'à la lumière bleue")
+	await _say("Darius", "Une lueur bleue, plus loin sur le chemin. Je n'ai pas le choix : j'y vais.")
+	_hint("Stick GAUCHE : avancer, reculer, aller sur le côté.")
+	await _wait(func(): return _flat_dist(rig.cam.global_position, Vector3(0, 0, -9.0)) < 2.5)
+	# 3. Tourner
+	_set_objective("tourne-toi vers la pierre levée")
+	await _say("Darius", "Cette pierre, sur le côté... Elle brille de la même lumière.")
+	_hint("Stick DROIT : tourner. Ou tourne simplement ton corps.")
+	await _wait(_facing_stone)
+	# 4. Attraper la page
+	page = Props.page()
+	page.position = Vector3(-2.2, 1.0, -10.0)
 	add_child(page)
-	World.box(page, Vector3.ZERO, Vector3(0.16, 0.22, 0.008), Color(0.9, 0.95, 1.0), 2.0)
-	World.light(page, Vector3.ZERO, Color(0.5, 0.75, 1.0), 0.8, 2.0)
-	World.box(self, Vector3(0.7, 0.55, -1.3), Vector3(0.25, 1.1, 0.25), Color(0.2, 0.22, 0.32))
-	# La Silhouette
-	silhouette = Node3D.new()
+	_set_objective("attrape la page sur la souche")
+	await _say("Darius", "Une page de papier, posée sur cette souche. Elle flotte.")
+	_hint("Approche la main de la page et maintiens GRIP pour l'attraper.")
+	await _wait(func(): return held_by != null)
+	# 5. Lire
+	_set_objective("amène la page près de ton visage")
+	await _say("Darius", "Elle est tiède. Je devrais la lire.")
+	_hint("Rapproche la page de tes yeux.")
+	await _wait(func(): return page.global_position.distance_to(rig.cam.global_position) < 0.4)
+	_hint("")
+	await _say("La page", "« Page 41. Une année contre une vérité. Quelqu'un a arraché la suite. »")
+	page.queue_free()
+	held_by = null
+	# 6. Télékinésie
+	_spawn_crates()
+	_set_objective("lance une caisse dans l'anneau bleu")
+	await _say("Darius", "Des caisses, là-bas, dans la clairière. Trop loin pour les toucher... et pourtant, je les sens.")
+	_hint("Vise une caisse avec le laser et MAINTIENS GRIP : elle flotte à distance.")
+	await _wait(func(): return tk_grabbed)
+	_hint("GACHETTE : la caisse vient dans ta main.")
+	await _wait(func(): return tk_pulled)
+	_hint("Bouge la main d'un geste franc et LACHE GRIP pour lancer. Vise l'anneau !")
+	await _wait(func(): return target_hit)
+	_clear_crates()
+	await _say("Darius", "Je déplace les choses d'un regard... Je ne sais pas ce que je suis en train de devenir.")
+	# 7. Pouvoir Retenir
+	_set_objective("utilise le pouvoir Retenir")
+	await _say("Darius", "Quelque chose m'observe, dans les arbres. Je dois pouvoir me protéger.")
+	_hint("Bouton A (main droite) : RETENIR. 5 secondes de protection, recharge 12 s.")
+	await _wait(func(): return powered)
+	light.light_energy = 4.0
+	await _say("Darius", "Le temps ralentit... C'est ça, « retenir ».")
+	light.light_energy = 2.4
+	# 8. Fuir
+	_set_objective("survis 20 secondes")
+	_build_silhouette()
+	await _say("Darius", "Une Silhouette ! Elle me prendra un souvenir si elle me touche. Recule, ou utilise Retenir !")
+	_hint("A = Retenir (recharge 12 s). Éloigne-toi d'elle avec le stick gauche.")
+	survive_left = 20.0
+	await _wait(func(): return survive_left <= 0.0)
 	silhouette.visible = false
+	_hint("")
+	_set_objective("")
+	await _say("Darius", "Elle est partie. Je crois que je sais me servir de ce que j'ai. Le Non-lieu m'attend.")
+	Settings.tutorial_done = true
+	Settings.save()
+	var btn := Button3D.new()
+	btn.text = "RETOUR AU MENU"
+	var yaw: float = rig.head_yaw()
+	var f := Vector3(-sin(yaw), 0, -cos(yaw))
+	btn.position = rig.cam.global_position + f * 1.8
+	btn.position.y = 1.2
+	btn.rotation.y = yaw
+	add_child(btn)
+	btn.pressed.connect(func(): finished.emit())
+	_say("", "Tutoriel terminé. Bravo !")
+
+func _facing_stone() -> bool:
+	var to: Vector3 = Vector3(7.0, 0, -9.5) - rig.cam.global_position
+	var want := atan2(-to.x, -to.z)
+	return absf(angle_difference(want, rig.head_yaw())) < deg_to_rad(20.0)
+
+func _on_grab(hand: XRController3D) -> void:
+	if page and is_instance_valid(page) and held_by == null and hand.global_position.distance_to(page.global_position) < 0.4:
+		held_by = hand
+
+func _on_release(hand: XRController3D) -> void:
+	pass
+
+func _physics_process(delta: float) -> void:
+	if held_by and page and is_instance_valid(page):
+		page.global_transform = Transform3D(held_by.global_basis, held_by.global_position + held_by.global_basis * Vector3(0, 0.06, -0.12))
+	if silhouette and silhouette.visible and rig:
+		_update_silhouette(delta)
+
+# ---------- Caisses, tonneaux et cible ----------
+func _spawn_crates() -> void:
+	target_hit = false
+	target_area = Area3D.new()
+	target_area.collision_layer = 0
+	target_area.collision_mask = 4
+	target_area.position = Vector3(0, 1.7, -23.0)
+	var cs := CollisionShape3D.new()
+	var sph := SphereShape3D.new()
+	sph.radius = 1.3
+	cs.shape = sph
+	target_area.add_child(cs)
+	var ring := MeshInstance3D.new()
+	var tm := TorusMesh.new()
+	tm.inner_radius = 1.15
+	tm.outer_radius = 1.3
+	ring.mesh = tm
+	ring.rotation.x = PI / 2.0
+	ring.material_override = World.mat(Color(0.3, 0.7, 1.0), 3.5)
+	target_area.add_child(ring)
+	add_child(target_area)
+	target_area.body_entered.connect(func(b): if b is RigidBody3D and b.is_in_group("grabbable"): target_hit = true)
+	World.light(self, Vector3(0, 1.7, -22.0), Color(0.3, 0.65, 1.0), 1.5, 7.0)
+	for i in 5:
+		var rb: RigidBody3D = Props.barrel() if i % 2 == 1 else Props.crate()
+		rb.position = Vector3(-3.0 + i * 1.5, 0.4, -14.5 - (i % 2) * 0.9)
+		rb.rotation.y = randf() * TAU
+		add_child(rb)
+		crates.append(rb)
+
+func _clear_crates() -> void:
+	for rb in crates:
+		if is_instance_valid(rb):
+			rb.queue_free()
+	crates.clear()
+	if target_area:
+		target_area.queue_free()
+
+# ---------- Silhouette ----------
+func _build_silhouette() -> void:
+	silhouette = Node3D.new()
 	add_child(silhouette)
 	var body := MeshInstance3D.new()
 	var cap := CapsuleMesh.new()
-	cap.radius = 0.28
-	cap.height = 1.9
+	cap.radius = 0.26
+	cap.height = 1.8
 	body.mesh = cap
 	body.material_override = World.mat(Color(0.01, 0.01, 0.02))
 	body.position.y = 0.95
 	silhouette.add_child(body)
-	for ex in [-0.1, 0.1]:
-		World.box(silhouette, Vector3(ex, 1.55, -0.26), Vector3(0.07, 0.03, 0.02), Color(0.7, 0.9, 1.0), 4.0)
-
-func begin(player_rig) -> void:
-	rig = player_rig
-	rig.movement_enabled = true
-	rig.power_used.connect(_on_power)
-	rig.grabbed.connect(_on_grab)
-	rig.released.connect(_on_release)
-	_next()
-
-func spawn_point() -> Vector3:
-	return Vector3(0, 0, 1.0)
-
-func _next() -> void:
-	step += 1
-	step_time = 0.0
-	var data: Dictionary = STEPS[step]
-	panel_step.text = "ETAPE %d / %d" % [step + 1, STEPS.size()]
-	panel_title.text = data["title"]
-	panel_text.text = data["text"]
-	start_yaw = rig.head_yaw()
-	start_pos = rig.cam.global_position
-	start_rig_yaw = rig.rotation.y
-	match step:
-		1:
-			var how := "Pousse le stick gauche vers l'avant, vise le sol,\nrelache pour te teleporter." if Settings.move_mode == "teleport" else "Pousse le stick gauche pour avancer."
-			panel_text.text = how + "\nDeplace-toi de deux metres."
-		2:
-			panel_text.text = "Pousse le stick droit a gauche ou a droite\npour tourner" + (" par crans." if Settings.turn_mode == "snap" else ".")
-		3:
-			page.visible = true
-		5:
-			_spawn_crates()
-		6:
-			_powered = false
-		7:
-			silhouette.visible = true
-			silhouette.global_position = Vector3(0, 0, -9)
-			survive = 0.0
-			hit_count = 0
-		8:
-			Settings.tutorial_done = true
-			Settings.save()
-			rig.movement_enabled = false
-			done_button = Button3D.new()
-			done_button.text = "RETOUR AU MENU"
-			done_button.position = Vector3(0, 0.9, -2.2)
-			add_child(done_button)
-			done_button.pressed.connect(func(): finished.emit())
-
-func _process(delta: float) -> void:
-	if rig == null or step < 0 or step >= STEPS.size():
-		return
-	step_time += delta
-	match step:
-		0:
-			if absf(angle_difference(start_yaw, rig.head_yaw())) > deg_to_rad(60.0):
-				_next()
-		1:
-			if rig.cam.global_position.distance_to(start_pos) > 2.0:
-				_next()
-		2:
-			if absf(angle_difference(start_rig_yaw, rig.rotation.y)) > deg_to_rad(25.0):
-				_next()
-		3:
-			if held_by:
-				_next()
-		4:
-			if held_by:
-				page.global_transform = Transform3D(held_by.global_basis, held_by.global_position + held_by.global_basis * Vector3(0, 0.08, -0.1))
-			if not _reading and page.global_position.distance_to(rig.cam.global_position) < 0.4 and step_time > 0.5:
-				_reading = true
-				panel_text.text = "« Page 41 : ta vie est un livre.\nQuelqu'un en arrache les pages. »"
-				_flash.light_energy = 3.0
-				await get_tree().create_timer(2.5).timeout
-				_flash.light_energy = 0.0
-				if step == 4:
-					page.visible = false
-					_next()
-		5:
-			if target_hit:
-				target_hit = false
-				_clear_crates()
-				_next()
-		6:
-			if _powered and step_time > 1.0:
-				_next()
-		7:
-			_update_silhouette(delta)
+	var cloak := MeshInstance3D.new()
+	var cm := CylinderMesh.new()
+	cm.top_radius = 0.28
+	cm.bottom_radius = 0.6
+	cm.height = 1.2
+	cm.radial_segments = 8
+	cloak.mesh = cm
+	cloak.material_override = World.mat(Color(0.015, 0.015, 0.03))
+	cloak.position.y = 0.6
+	silhouette.add_child(cloak)
+	for ex in [-0.09, 0.09]:
+		World.box(silhouette, Vector3(ex, 1.55, -0.24), Vector3(0.07, 0.03, 0.02), Color(0.7, 0.9, 1.0), 5.0)
+	var cam_pos: Vector3 = rig.cam.global_position
+	silhouette.global_position = Vector3(cam_pos.x + 4.0, 0, cam_pos.z - 13.0)
 
 func _update_silhouette(delta: float) -> void:
 	var target: Vector3 = rig.cam.global_position
@@ -179,87 +305,18 @@ func _update_silhouette(delta: float) -> void:
 	if dist > 0.1:
 		silhouette.look_at(Vector3(target.x, pos.y, target.z), Vector3.UP)
 		silhouette.rotate_y(PI)
-	if dist > 0.01:
-		silhouette.global_position += dir.normalized() * 1.1 * delta
+		silhouette.global_position += dir.normalized() * 1.2 * delta
 	if dist < 1.0:
 		if rig.is_protected():
-			silhouette.global_position -= dir.normalized() * 3.0 * delta
+			silhouette.global_position -= dir.normalized() * 3.5 * delta
 		else:
-			hit_count += 1
-			panel_text.text = "Elle t'a pris un souvenir. Recule !\nTiens 20 secondes. (%d)" % hit_count
-			silhouette.global_position = Vector3(0, 0, -9)
+			hits += 1
+			_hint("Elle t'a pris un souvenir (%d). Recule, utilise A !" % hits)
+			var c: Vector3 = rig.cam.global_position
+			silhouette.global_position = Vector3(c.x + 4.0, 0, c.z - 13.0)
 			rig._haptic(rig.right(), 1.0)
 			rig._haptic(rig.left(), 1.0)
-	survive += delta
-	if survive >= 20.0:
-		silhouette.visible = false
-		_next()
+	survive_left -= delta
 
-func _on_power() -> void:
-	_powered = true
-	_flash.light_energy = 2.5
-	await get_tree().create_timer(0.6).timeout
-	_flash.light_energy = 0.0
-
-func _on_grab(hand: XRController3D) -> void:
-	if step == 3 and page.visible and hand.global_position.distance_to(page.global_position) < 0.35:
-		held_by = hand
-
-func _on_release(hand: XRController3D) -> void:
-	if hand == held_by and step != 4:
-		held_by = null
-
-# ---- Télékinésie : des caisses à soulever de loin et une cible à toucher ----
-func _spawn_crates() -> void:
-	var target_area := Area3D.new()
-	target_area.collision_layer = 0
-	target_area.collision_mask = 4
-	target_area.position = Vector3(0, 1.6, -9.0)
-	var cs := CollisionShape3D.new()
-	var sph := SphereShape3D.new()
-	sph.radius = 1.0
-	cs.shape = sph
-	target_area.add_child(cs)
-	var ring := MeshInstance3D.new()
-	var tm := TorusMesh.new()
-	tm.inner_radius = 0.85
-	tm.outer_radius = 1.0
-	ring.mesh = tm
-	ring.rotation.x = PI / 2.0
-	ring.material_override = World.mat(Color(0.3, 0.7, 1.0), 3.0)
-	target_area.add_child(ring)
-	target_area.name = "TkTarget"
-	add_child(target_area)
-	target_area.body_entered.connect(func(body):
-		if body is RigidBody3D and body.is_in_group("grabbable"):
-			target_hit = true
-	)
-	for i in 4:
-		var rb := RigidBody3D.new()
-		rb.collision_layer = 4
-		rb.collision_mask = 1 | 4
-		rb.mass = 2.0
-		rb.add_to_group("grabbable")
-		var shape := CollisionShape3D.new()
-		var bs := BoxShape3D.new()
-		bs.size = Vector3(0.5, 0.5, 0.5)
-		shape.shape = bs
-		rb.add_child(shape)
-		var mesh := MeshInstance3D.new()
-		var bm := BoxMesh.new()
-		bm.size = Vector3(0.5, 0.5, 0.5)
-		mesh.mesh = bm
-		mesh.material_override = World.mat(Color(0.55, 0.4, 0.28), 0.0)
-		rb.add_child(mesh)
-		rb.position = Vector3(-2.0 + i * 1.4, 0.4, -4.0 - i * 0.6)
-		add_child(rb)
-		crates.append(rb)
-
-func _clear_crates() -> void:
-	for rb in crates:
-		if is_instance_valid(rb):
-			rb.queue_free()
-	crates.clear()
-	var t := get_node_or_null("TkTarget")
-	if t:
-		t.queue_free()
+func _exit_tree() -> void:
+	_alive = false

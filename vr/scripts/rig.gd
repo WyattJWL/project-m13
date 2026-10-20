@@ -7,6 +7,7 @@ extends XROrigin3D
 signal power_used
 signal telekinesis_grab(body: RigidBody3D)
 signal telekinesis_launch(body: RigidBody3D)
+signal telekinesis_pulled(body: RigidBody3D)
 signal grabbed(controller: XRController3D)
 signal released(controller: XRController3D)
 
@@ -205,6 +206,7 @@ func _pull_to_hand(hand: XRController3D) -> void:
 		return
 	in_hand[hand] = true
 	_haptic(hand, 0.5)
+	telekinesis_pulled.emit(held[hand])
 
 func _update_telekinesis(delta: float) -> void:
 	for hand in hands:

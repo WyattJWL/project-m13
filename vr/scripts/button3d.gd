@@ -8,7 +8,7 @@ var text := "BOUTON":
 		text = value
 		if _label:
 			_label.text = value
-var size := Vector3(1.4, 0.26, 0.06)
+var size := Vector3(2.1, 0.34, 0.06)
 var _label: Label3D
 var _mesh: MeshInstance3D
 var _mat := StandardMaterial3D.new()
@@ -34,8 +34,8 @@ func _ready() -> void:
 	add_child(_mesh)
 	_label = Label3D.new()
 	_label.text = text
-	_label.font_size = 56
-	_label.pixel_size = 0.0035
+	_label.font_size = 64
+	_label.pixel_size = 0.0042
 	_label.position = Vector3(0, 0, size.z / 2 + 0.002)
 	_label.modulate = Color(0.9, 0.95, 1)
 	_label.outline_size = 6
