@@ -9,7 +9,7 @@ on:
     paths: ["vr/**", ".github/workflows/vr-apk.yml"]
 
 env:
-  GODOT_VERSION: "4.4.1"
+  GODOT_VERSION: "4.6"
 
 permissions:
   contents: write
@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: barichello/godot-ci:4.4.1
+      image: barichello/godot-ci:4.6
     steps:
       - uses: actions/checkout@v4
 
@@ -37,15 +37,14 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           apt-get update -qq && apt-get install -y -qq jq unzip curl >/dev/null
-          curl -sH "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/GodotVR/godot_openxr_vendors/releases/latest > rel.json
-          jq -r '.tag_name, (.assets[].name)' rel.json
-          URL=$(jq -r '[.assets[] | select(.name | test("symbols") | not) | select(.name | test("\\.zip$"))] | (map(select(.name | test("release"))) + .)[0].browser_download_url' rel.json)
+          curl -sH "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/GodotVR/godot_openxr_vendors/releases/latest > /tmp/rel.json
+          jq -r '.tag_name, (.assets[].name)' /tmp/rel.json
+          URL=$(jq -r '[.assets[] | select(.name | test("symbols") | not) | select(.name | test("\\.zip$"))] | (map(select(.name | test("release"))) + .)[0].browser_download_url' /tmp/rel.json)
           echo "Plugin: $URL"
-          curl -sL "$URL" -o vendors.zip
-          mkdir -p tmp_vendors && unzip -q vendors.zip -d tmp_vendors
+          curl -sL "$URL" -o /tmp/vendors.zip
+          mkdir -p /tmp/tmp_vendors && unzip -q /tmp/vendors.zip -d /tmp/tmp_vendors
           mkdir -p addons
-          # le zip contient addons/godotopenxrvendors (ou un dossier parent)
-          SRC=$(find tmp_vendors -type d -name godotopenxrvendors | head -1)
+          SRC=$(find /tmp/tmp_vendors -type d -name godotopenxrvendors | head -1)
           cp -r "$SRC" addons/
           ls addons/godotopenxrvendors | head
 

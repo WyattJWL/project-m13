@@ -171,11 +171,11 @@ func _process(delta: float) -> void:
 			_update_silhouette(delta)
 
 func _update_silhouette(delta: float) -> void:
-	var target := rig.cam.global_position
+	var target: Vector3 = rig.cam.global_position
 	target.y = 0.0
-	var pos := silhouette.global_position
-	var dir := (target - pos)
-	var dist := dir.length()
+	var pos: Vector3 = silhouette.global_position
+	var dir: Vector3 = target - pos
+	var dist: float = dir.length()
 	if dist > 0.1:
 		silhouette.look_at(Vector3(target.x, pos.y, target.z), Vector3.UP)
 		silhouette.rotate_y(PI)
