@@ -59,7 +59,7 @@ static func controller(side: String) -> Node3D:
 	sm.height = 0.014
 	stick.mesh = sm
 	stick.material_override = World.mat(Color(0.3, 0.3, 0.34), 0.0, 0.4)
-	stick.position = Vector3(-0.012 * s, 0.038, -0.03)
+	stick.position = Vector3(0.012 * s, 0.038, -0.03)
 	root.add_child(stick)
 	parts["stick"] = stick
 	for i in 2:
@@ -70,7 +70,7 @@ static func controller(side: String) -> Node3D:
 		bc.height = 0.008
 		b.mesh = bc
 		b.material_override = World.mat(Color(0.3, 0.3, 0.34), 0.0, 0.4)
-		b.position = Vector3(0.016 * s, 0.034, -0.05 + i * 0.03)
+		b.position = Vector3(-0.016 * s, 0.034, -0.05 + i * 0.03)
 		root.add_child(b)
 		parts["b" if i == 0 else "a"] = b   # droite : B devant, A derrière (X/Y à gauche)
 	var trig := _box(root, Vector3(0, -0.004, -0.06), Vector3(0.016, 0.04, 0.018), World.mat(Color(0.2, 0.2, 0.24), 0.0, 0.4))

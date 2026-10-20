@@ -7,6 +7,7 @@ const TutorialScript := preload("res://scripts/tutorial.gd")
 const World := preload("res://scripts/world.gd")
 const Props := preload("res://scripts/props.gd")
 const Button3D := preload("res://scripts/button3d.gd")
+const Sfx := preload("res://scripts/sfx.gd")
 
 var xr_interface: XRInterface
 var rig
@@ -23,6 +24,7 @@ func _ready() -> void:
 		push_warning("OpenXR non initialisé : lance ce projet sur un casque.")
 	rig = Rig.new()
 	add_child(rig)
+	rig.quit_to_menu.connect(show_menu)
 	show_menu()
 
 func _swap(new_scene: Node3D) -> void:
@@ -40,21 +42,25 @@ func _swap(new_scene: Node3D) -> void:
 func show_menu() -> void:
 	rig.movement_enabled = false
 	rig.ui_enabled = true
+	rig.set_menu_available(false)
+	rig.hint_controller("", "")
 	var menu := MenuScript.new()
-	menu.play.connect(_on_play)
-	menu.tutorial.connect(show_tutorial)
+	menu.new_game.connect(func(slot: int, diff: String):
+		Settings.new_game(slot, diff)
+		show_tutorial())
+	menu.load_game.connect(func(slot: int):
+		Settings.load_game(slot)
+		if Settings.tutorial_done():
+			show_chapter_placeholder()
+		else:
+			show_tutorial())
 	menu.quit.connect(func(): get_tree().quit())
 	_swap(menu)
-
-func _on_play() -> void:
-	if not Settings.tutorial_done:
-		show_tutorial()
-	else:
-		show_chapter_placeholder()
+	Sfx.ambience(menu)
 
 func show_tutorial() -> void:
 	var tuto := TutorialScript.new()
-	tuto.finished.connect(show_menu)
+	tuto.finished.connect(show_chapter_placeholder)
 	_swap(tuto)
 	rig.ui_enabled = true
 	tuto.begin(rig)
@@ -74,6 +80,9 @@ func show_chapter_placeholder() -> void:
 	b.position = Vector3(0, 1.0, -3.0)
 	s.add_child(b)
 	b.pressed.connect(show_menu)
+	rig.set_menu_available(true)
+	rig.movement_enabled = true
+	Sfx.ambience(s)
 	_swap_plain(s)
 
 func _swap_plain(s: Node3D) -> void:

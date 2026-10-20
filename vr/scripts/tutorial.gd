@@ -7,6 +7,7 @@ signal finished
 const World := preload("res://scripts/world.gd")
 const Props := preload("res://scripts/props.gd")
 const Button3D := preload("res://scripts/button3d.gd")
+const Sfx := preload("res://scripts/sfx.gd")
 
 var rig
 var hud: Node3D
@@ -29,6 +30,7 @@ var silhouette: Node3D
 var survive_left := 0.0
 var hits := 0
 var light: OmniLight3D
+var beacon: Array[Node3D] = []
 var _alive := true
 
 func _ready() -> void:
@@ -43,8 +45,10 @@ func _ready() -> void:
 	for i in 6:
 		Props.lantern(self, Vector3(1.9 if i % 2 == 0 else -1.9, 0, 2.0 - i * 7.0), Color(1.0, 0.72, 0.38), i % 2 == 0)
 	# balise bleue (premier but)
-	light = World.light(self, Vector3(0, 2.0, -9.0), Color(0.3, 0.6, 1.0), 2.4, 9.0)
-	World.box(self, Vector3(0, 2.0, -9.0), Vector3(0.12, 4.0, 0.12), Color(0.35, 0.7, 1.0), 4.0)
+	var beacon_light := World.light(self, Vector3(0, 2.0, -9.0), Color(0.3, 0.6, 1.0), 2.4, 9.0)
+	var beacon_pillar := World.box(self, Vector3(0, 2.0, -9.0), Vector3(0.12, 4.0, 0.12), Color(0.35, 0.7, 1.0), 4.0)
+	beacon = [beacon_light, beacon_pillar]
+	light = World.light(self, Vector3(0, 1.5, -9.0), Color(0.3, 0.6, 1.0), 0.0, 6.0)
 	Props.standing_stone(self, Vector3(7.0, 0, -9.5), deg_to_rad(-70))
 	Props.stump(self, Vector3(-2.2, 0, -10.0))
 	_build_hud()
@@ -135,6 +139,8 @@ func _flat_dist(a: Vector3, b: Vector3) -> float:
 func begin(player_rig) -> void:
 	rig = player_rig
 	rig.movement_enabled = true
+	rig.set_menu_available(true)
+	Sfx.ambience(self)
 	rig.power_used.connect(func(): powered = true)
 	rig.grabbed.connect(_on_grab)
 	rig.released.connect(_on_release)
@@ -155,6 +161,10 @@ func _run() -> void:
 	_hint("Stick GAUCHE : avancer, reculer, aller sur le côté.")
 	rig.hint_controller("left", "stick")
 	await _wait(func(): return _flat_dist(rig.cam.global_position, Vector3(0, 0, -9.0)) < 2.5)
+	for n in beacon:
+		if is_instance_valid(n):
+			n.queue_free()
+	Sfx.play(self, "pickup", null, -6.0)
 	# 3. Tourner
 	_set_objective("tourne-toi vers la pierre levée")
 	await _say("Darius", "Cette pierre, sur le côté... Elle brille de la même lumière.")
@@ -200,8 +210,8 @@ func _run() -> void:
 	# 7. Pouvoir Retenir
 	_set_objective("utilise le pouvoir Retenir")
 	await _say("Darius", "Quelque chose m'observe, dans les arbres. Je dois pouvoir me protéger.")
-	_hint("Bouton A (main droite) : RETENIR. 5 secondes de protection, recharge 12 s.")
-	rig.hint_controller("right", "a")
+	_hint("Bouton %s : RETENIR. 5 secondes de protection, recharge %d s." % [rig.power_button_name(), int(Settings.power_cooldown())])
+	rig.hint_controller("dom", "a")
 	show_power = true
 	await _wait(func(): return powered)
 	rig.hint_controller("", "")
@@ -212,8 +222,8 @@ func _run() -> void:
 	_set_objective("survis 20 secondes")
 	_build_silhouette()
 	await _say("Darius", "Une Silhouette ! Elle me prendra un souvenir si elle me touche. Recule, ou utilise Retenir !")
-	_hint("A = Retenir (recharge 12 s). Éloigne-toi d'elle avec le stick gauche.")
-	rig.hint_controller("right", "a")
+	_hint("%s = Retenir. Éloigne-toi d'elle avec le stick gauche." % rig.power_button_name())
+	rig.hint_controller("dom", "a")
 	survive_left = 20.0
 	await _wait(func(): return survive_left <= 0.0)
 	silhouette.visible = false
@@ -223,8 +233,7 @@ func _run() -> void:
 	_hint("")
 	_set_objective("")
 	await _say("Darius", "Elle est partie. Je crois que je sais me servir de ce que j'ai. Le Non-lieu m'attend.")
-	Settings.tutorial_done = true
-	Settings.save()
+	Settings.mark_tutorial_done()
 	var btn := Button3D.new()
 	btn.text = "RETOUR AU MENU"
 	var yaw: float = rig.head_yaw()
@@ -245,6 +254,7 @@ func _facing_stone() -> bool:
 func _on_grab(hand: XRController3D) -> void:
 	if page and is_instance_valid(page) and held_by == null and hand.global_position.distance_to(page.global_position) < 0.4:
 		held_by = hand
+		Sfx.play(self, "page", null, -4.0)
 
 func _on_release(hand: XRController3D) -> void:
 	pass
@@ -317,6 +327,7 @@ func _build_silhouette() -> void:
 	silhouette.add_child(cloak)
 	for ex in [-0.09, 0.09]:
 		World.box(silhouette, Vector3(ex, 1.55, -0.24), Vector3(0.07, 0.03, 0.02), Color(0.7, 0.9, 1.0), 5.0)
+	Sfx.play(self, "whisper", null, -6.0)
 	var cam_pos: Vector3 = rig.cam.global_position
 	silhouette.global_position = Vector3(cam_pos.x + 4.0, 0, cam_pos.z - 13.0)
 
@@ -329,15 +340,16 @@ func _update_silhouette(delta: float) -> void:
 	if dist > 0.1:
 		silhouette.look_at(Vector3(target.x, pos.y, target.z), Vector3.UP)
 		silhouette.rotate_y(PI)
-		silhouette.global_position += dir.normalized() * 1.2 * delta
+		silhouette.global_position += dir.normalized() * 1.2 * Settings.enemy_speed() * delta
 	if dist < 1.0:
 		if rig.is_protected():
 			silhouette.global_position -= dir.normalized() * 3.5 * delta
 		else:
 			hits += 1
-			_hint("Elle t'a pris un souvenir (%d). Recule, utilise A !" % hits)
+			_hint("Elle t'a pris un souvenir (%d). Recule, utilise %s !" % [hits, rig.power_button_name()])
 			var c: Vector3 = rig.cam.global_position
 			silhouette.global_position = Vector3(c.x + 4.0, 0, c.z - 13.0)
+			Sfx.play(self, "hurt", null, -2.0)
 			rig._haptic(rig.right(), 1.0)
 			rig._haptic(rig.left(), 1.0)
 	survive_left -= delta

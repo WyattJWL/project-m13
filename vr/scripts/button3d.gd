@@ -1,4 +1,5 @@
 extends Area3D
+const Sfx := preload("res://scripts/sfx.gd")
 # Bouton 3D visé au laser : survol = éclairé, gâchette = appui.
 
 signal pressed
@@ -53,9 +54,21 @@ func set_hover(on: bool) -> void:
 	if on == _hover:
 		return
 	_hover = on
+	if on:
+		Sfx.play(self, "tick", null, -8.0)
 	_mat.emission_energy_multiplier = 1.6 if on else 0.4
 	_label.modulate = Color(1, 1, 1) if on else Color(0.9, 0.95, 1)
 	scale = Vector3.ONE * (1.04 if on else 1.0)
 
+# Bouton grisé (non utilisable).
+func dim() -> void:
+	_mat.albedo_color = Color(0.1, 0.1, 0.12)
+	_mat.emission = Color(0.15, 0.15, 0.2)
+	_label.modulate = Color(0.5, 0.5, 0.55)
+	set_meta("dimmed", true)
+
 func press() -> void:
+	if has_meta("dimmed"):
+		return
+	Sfx.play(self, "click", null, -4.0)
 	pressed.emit()

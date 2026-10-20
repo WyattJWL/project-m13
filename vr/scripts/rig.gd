@@ -5,6 +5,7 @@ extends XROrigin3D
 # A (main droite) = pouvoir « Retenir ».
 
 signal power_used
+signal quit_to_menu
 signal telekinesis_grab(body: RigidBody3D)
 signal telekinesis_launch(body: RigidBody3D)
 signal telekinesis_pulled(body: RigidBody3D)
@@ -12,12 +13,19 @@ signal grabbed(controller: XRController3D)
 signal released(controller: XRController3D)
 
 const Hands := preload("res://scripts/hands.gd")
+const Sfx := preload("res://scripts/sfx.gd")
+const Button3D := preload("res://scripts/button3d.gd")
 var cam: XRCamera3D
 var visuals: Dictionary = {}     # XRController3D -> { hand, ctrl, tag, part }
 var power_ui: Node3D
 var power_text: Label3D
 var power_bar: MeshInstance3D
 var _was_ready := true
+var menu_available := false     # le menu du poignet n'existe que pendant une partie
+var wrist_menu: Node3D
+var wrist_buttons: Dictionary = {}
+var _cooldown_total := 12.0
+var _step_acc := 0.0
 var hands: Array[XRController3D] = []
 var lasers: Dictionary = {}     # XRController3D -> RayCast3D
 var beams: Dictionary = {}      # XRController3D -> MeshInstance3D
@@ -54,6 +62,7 @@ func _ready() -> void:
 		hand.button_released.connect(_on_release.bind(hand))
 	_build_marker()
 	_build_power_ui()
+	_build_wrist_menu()
 	_build_vignette()
 	position.y = 0.4 if Settings.seated else 0.0
 
@@ -62,6 +71,18 @@ func left() -> XRController3D:
 
 func right() -> XRController3D:
 	return hands[1]
+
+func dominant_hand() -> XRController3D:
+	return right() if Settings.dominant == "right" else left()
+
+func off_hand() -> XRController3D:
+	return left() if Settings.dominant == "right" else right()
+
+func dom_side() -> String:
+	return "dom"
+
+func power_button_name() -> String:
+	return "A" if Settings.dominant == "right" else "X"
 
 func _build_hand(hand: XRController3D) -> void:
 	var side := "left" if hand.tracker == &"left_hand" else "right"
@@ -72,12 +93,12 @@ func _build_hand(hand: XRController3D) -> void:
 	hand.add_child(ctrl)
 	var tag := Label3D.new()
 	tag.font_size = 40
-	tag.pixel_size = 0.0012
+	tag.pixel_size = 0.0006
 	tag.modulate = Color(1.0, 0.85, 0.3)
 	tag.outline_size = 8
 	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	tag.no_depth_test = true
-	tag.position = Vector3(0, 0.12, -0.02)
+	tag.position = Vector3(0, 0.1, -0.02)
 	tag.visible = false
 	hand.add_child(tag)
 	visuals[hand] = {"hand": visual, "ctrl": ctrl, "tag": tag, "part": ""}
@@ -162,8 +183,11 @@ func _on_button(name: String, hand: XRController3D) -> void:
 				return
 			grabbed.emit(hand)
 		"ax_button":
-			if hand == right():
+			if hand == dominant_hand():
 				use_power()
+		"menu_button":
+			if menu_available and hand == off_hand():
+				toggle_wrist_menu()
 
 func _on_release(name: String, hand: XRController3D) -> void:
 	if name == "grip_click":
@@ -191,6 +215,7 @@ func _try_telekinesis(hand: XRController3D) -> bool:
 	body.angular_damp = 3.0
 	body.sleeping = false
 	_haptic(hand, 0.7)
+	Sfx.play(self, "tk_grab", body.global_position, -2.0)
 	telekinesis_grab.emit(body)
 	return true
 
@@ -210,6 +235,7 @@ func _drop(hand: XRController3D, _unused: bool) -> void:
 	if v.length() > 2.0:
 		body.angular_velocity = Vector3(randf_range(-4, 4), randf_range(-4, 4), randf_range(-4, 4))
 		_haptic(hand, 0.8)
+		Sfx.play(self, "whoosh", body.global_position, 0.0)
 		telekinesis_launch.emit(body)
 
 # GÂCHETTE pendant qu'on retient un objet à distance : il vient se coller dans la main.
@@ -218,6 +244,7 @@ func _pull_to_hand(hand: XRController3D) -> void:
 		return
 	in_hand[hand] = true
 	_haptic(hand, 0.5)
+	Sfx.play(self, "pickup", null, -4.0)
 	telekinesis_pulled.emit(held[hand])
 
 func _update_telekinesis(delta: float) -> void:
@@ -246,7 +273,8 @@ func _update_telekinesis(delta: float) -> void:
 func hint_controller(side: String, part: String) -> void:
 	for h in hands:
 		var v: Dictionary = visuals[h]
-		var mine: bool = side == "both" or (side == "left" and h == left()) or (side == "right" and h == right())
+		var want := Settings.dominant if side == "dom" else side
+		var mine: bool = want == "both" or (want == "left" and h == left()) or (want == "right" and h == right())
 		v["part"] = part if mine else ""
 		(v["hand"] as Node3D).visible = not mine
 		(v["ctrl"] as Node3D).visible = mine
@@ -267,7 +295,7 @@ func _build_power_ui() -> void:
 	power_ui = Node3D.new()
 	power_ui.position = Vector3(0, 0.07, 0.1)
 	power_ui.rotation_degrees = Vector3(-70, 0, 0)
-	left().add_child(power_ui)
+	off_hand().add_child(power_ui)
 	var back := MeshInstance3D.new()
 	var qm := QuadMesh.new()
 	qm.size = Vector2(0.2, 0.09)
@@ -300,7 +328,7 @@ func power_status() -> Dictionary:
 	if prot > 0.0:
 		return {"state": "protege", "left": prot, "ratio": prot / 5.0}
 	if power_cooldown > 0.0:
-		return {"state": "recharge", "left": power_cooldown, "ratio": 1.0 - power_cooldown / 7.0}
+		return {"state": "recharge", "left": power_cooldown, "ratio": 1.0 - power_cooldown / maxf(1.0, _cooldown_total - 5.0)}
 	return {"state": "pret", "left": 0.0, "ratio": 1.0}
 
 func power_label() -> String:
@@ -332,15 +360,94 @@ func _update_power_ui() -> void:
 	if is_ready and not _was_ready:
 		_haptic(right(), 0.8)
 		_haptic(left(), 0.8)
+		Sfx.play(self, "ready", null, -6.0)
 	_was_ready = is_ready
+
+# ---- Menu du poignet (bouton menu de la manette non dominante) ----
+func _build_wrist_menu() -> void:
+	wrist_menu = Node3D.new()
+	wrist_menu.position = Vector3(0, 0.13, 0.02)
+	wrist_menu.rotation_degrees = Vector3(-50, 0, 0)
+	wrist_menu.visible = false
+	off_hand().add_child(wrist_menu)
+	var back := MeshInstance3D.new()
+	var qm := QuadMesh.new()
+	qm.size = Vector2(0.32, 0.3)
+	back.mesh = qm
+	var m := StandardMaterial3D.new()
+	m.albedo_color = Color(0.02, 0.03, 0.07, 0.85)
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	back.material_override = m
+	back.position = Vector3(0, 0.1, -0.012)
+	wrist_menu.add_child(back)
+	var items := ["resume", "dom", "vig", "menu"]
+	for i in items.size():
+		var b := Button3D.new()
+		b.size = Vector3(0.28, 0.055, 0.012)
+		b.position = Vector3(0, 0.2 - i * 0.065, 0)
+		wrist_menu.add_child(b)
+		wrist_buttons[items[i]] = b
+		b.pressed.connect(_on_wrist.bind(items[i]))
+	_refresh_wrist()
+	_set_wrist_active(false)
+
+func _refresh_wrist() -> void:
+	wrist_buttons["resume"].text = "REPRENDRE"
+	wrist_buttons["dom"].text = "MAIN DOMINANTE : " + ("DROITE" if Settings.dominant == "right" else "GAUCHE")
+	wrist_buttons["vig"].text = "VIGNETTE : " + ("OUI" if Settings.vignette else "NON")
+	wrist_buttons["menu"].text = "MENU PRINCIPAL"
+
+func _set_wrist_active(on: bool) -> void:
+	wrist_menu.visible = on
+	for k in wrist_buttons:
+		for c in (wrist_buttons[k] as Node).get_children():
+			if c is CollisionShape3D:
+				c.set_deferred("disabled", not on)
+
+func toggle_wrist_menu() -> void:
+	if wrist_menu == null:
+		return
+	_set_wrist_active(not wrist_menu.visible)
+
+func _on_wrist(which: String) -> void:
+	match which:
+		"resume":
+			_set_wrist_active(false)
+		"dom":
+			Settings.dominant = "left" if Settings.dominant == "right" else "right"
+			Settings.save()
+			refresh_hands()
+		"vig":
+			Settings.vignette = not Settings.vignette
+			Settings.save()
+		"menu":
+			_set_wrist_active(false)
+			quit_to_menu.emit()
+	_refresh_wrist()
+
+# Après un changement de main dominante : le menu et l'affichage du pouvoir passent sur l'autre main.
+func refresh_hands() -> void:
+	for n in [power_ui, wrist_menu]:
+		if n and n.get_parent():
+			n.get_parent().remove_child(n)
+			off_hand().add_child(n)
+
+func set_menu_available(on: bool) -> void:
+	menu_available = on
+	if not on and wrist_menu:
+		_set_wrist_active(false)
 
 func use_power() -> void:
 	if power_cooldown > 0.0:
 		return
-	power_cooldown = 12.0
+	_cooldown_total = Settings.power_cooldown()
+	power_cooldown = _cooldown_total
 	protected_until = Time.get_ticks_msec() / 1000.0 + 5.0
 	power_used.emit()
-	_haptic(right(), 0.6)
+	Sfx.play(self, "power", null, -4.0)
+	Sfx.play(self, "shield", null, -8.0)
+	_haptic(dominant_hand(), 0.6)
 
 func is_protected() -> bool:
 	return Time.get_ticks_msec() / 1000.0 < protected_until
@@ -407,6 +514,10 @@ func _locomotion(delta: float) -> void:
 			var basis_yaw := Basis(Vector3.UP, head_yaw())
 			var dir := basis_yaw * Vector3(l.x, 0, -l.y)
 			position += dir * 2.0 * delta
+			_step_acc += 2.0 * delta * l.length()
+			if _step_acc > 0.85:
+				_step_acc = 0.0
+				Sfx.play(self, "step", null, -10.0)
 			_moving_amount = maxf(_moving_amount, 0.8)
 	else:
 		_teleport_aim(l)
