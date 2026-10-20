@@ -316,8 +316,8 @@ func _spawn_weapons() -> void:
 	var table := Node3D.new()
 	table.position = Vector3(-3.2, 0, -13.0)
 	add_child(table)
-	World.box(table, Vector3(0, 0.0, 0), Vector3(1.3, 0.78, 0.7), Color(0.34, 0.23, 0.14), 0.0, true)
-	World.box(table, Vector3(0, 0.78, 0), Vector3(1.4, 0.05, 0.8), Color(0.45, 0.31, 0.19))
+	World.bx(table, Vector3(0, 0.0, 0), Vector3(1.3, 0.78, 0.7), Color(0.34, 0.23, 0.14), 0.0, true)
+	World.bx(table, Vector3(0, 0.78, 0), Vector3(1.4, 0.05, 0.8), Color(0.45, 0.31, 0.19))
 	var k := Items.knife()
 	k.position = Vector3(-3.55, 0.9, -13.0)
 	k.rotation_degrees.y = 20
@@ -331,9 +331,9 @@ func _spawn_weapons() -> void:
 	d.position = Vector3(2.8, 0, -13.5)
 	add_child(d)
 	dummy = d
-	World.box(d, Vector3(0, 0, 0), Vector3(0.12, 1.9, 0.12), Color(0.35, 0.24, 0.15), 0.0, true)
-	World.box(d, Vector3(0, 1.25, 0), Vector3(0.5, 0.55, 0.3), Color(0.55, 0.45, 0.3))
-	World.box(d, Vector3(0, 1.45, 0), Vector3(1.0, 0.1, 0.1), Color(0.35, 0.24, 0.15))
+	World.bx(d, Vector3(0, 0, 0), Vector3(0.12, 1.9, 0.12), Color(0.35, 0.24, 0.15), 0.0, true)
+	World.bx(d, Vector3(0, 1.25, 0), Vector3(0.5, 0.55, 0.3), Color(0.55, 0.45, 0.3))
+	World.bx(d, Vector3(0, 1.45, 0), Vector3(1.0, 0.1, 0.1), Color(0.35, 0.24, 0.15))
 	var head := MeshInstance3D.new()
 	var sm := SphereMesh.new()
 	sm.radius = 0.15

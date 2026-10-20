@@ -4,6 +4,7 @@ extends Node3D
 const Rig := preload("res://scripts/rig.gd")
 const MenuScript := preload("res://scripts/menu.gd")
 const TutorialScript := preload("res://scripts/tutorial.gd")
+const GameScript := preload("res://scripts/game.gd")
 const World := preload("res://scripts/world.gd")
 const Props := preload("res://scripts/props.gd")
 const Button3D := preload("res://scripts/button3d.gd")
@@ -51,7 +52,7 @@ func show_menu() -> void:
 	menu.load_game.connect(func(slot: int):
 		Settings.load_game(slot)
 		if Settings.tutorial_done():
-			show_chapter_placeholder()
+			show_game()
 		else:
 			show_tutorial())
 	menu.quit.connect(func(): get_tree().quit())
@@ -60,10 +61,17 @@ func show_menu() -> void:
 
 func show_tutorial() -> void:
 	var tuto := TutorialScript.new()
-	tuto.finished.connect(show_chapter_placeholder)
+	tuto.finished.connect(show_game)
 	_swap(tuto)
 	rig.ui_enabled = true
 	tuto.begin(rig)
+
+func show_game() -> void:
+	var game := GameScript.new()
+	game.finished.connect(show_menu)
+	_swap(game)
+	rig.ui_enabled = true
+	game.begin(rig)
 
 func show_chapter_placeholder() -> void:
 	# Le chapitre 1 arrive dans la prochaine version.

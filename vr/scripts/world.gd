@@ -74,3 +74,7 @@ static func blue_lines(parent: Node, center: Vector3, radius: float, count: int,
 		var a := TAU * float(i) / float(count)
 		var pos := center + Vector3(cos(a) * radius, height / 2.0, sin(a) * radius)
 		box(parent, pos, Vector3(0.06, height, 0.06), Color(0.3, 0.65, 1.0), 2.5)
+
+# Comme box(), mais `pos.y` est le BAS de l'objet (pratique pour poser meubles et murs au sol).
+static func bx(parent: Node, pos: Vector3, size: Vector3, color: Color, emissive := 0.0, solid := false) -> Node3D:
+	return box(parent, pos + Vector3(0, size.y / 2.0, 0), size, color, emissive, solid)

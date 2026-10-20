@@ -53,11 +53,11 @@ func slot_label(i: int) -> String:
 	if s.is_empty():
 		return "PARTIE %d  -  VIDE" % (i + 1)
 	var d: Dictionary = DIFFICULTIES.get(s.get("difficulty", "normal"), DIFFICULTIES["normal"])
-	var where := "TUTORIEL" if not s.get("tutorial_done", false) else "CHAPITRE 1"
+	var where := "TUTORIEL" if not s.get("tutorial_done", false) else "CHAPITRE %d" % int(s.get("chapter", 1))
 	return "PARTIE %d  -  %s  -  %s" % [i + 1, d["label"], where]
 
 func new_game(i: int, difficulty: String) -> void:
-	slots[i] = {"name": "Partie %d" % (i + 1), "difficulty": difficulty, "tutorial_done": false, "created": Time.get_unix_time_from_system()}
+	slots[i] = {"name": "Partie %d" % (i + 1), "difficulty": difficulty, "tutorial_done": false, "chapter": 1, "created": Time.get_unix_time_from_system()}
 	current_slot = i
 	save()
 
@@ -75,6 +75,14 @@ func tutorial_done() -> bool:
 func mark_tutorial_done() -> void:
 	if current_slot >= 0:
 		slots[current_slot]["tutorial_done"] = true
+		save()
+
+func chapter() -> int:
+	return int(current().get("chapter", 1))
+
+func set_chapter(n: int) -> void:
+	if current_slot >= 0:
+		slots[current_slot]["chapter"] = n
 		save()
 
 func difficulty() -> Dictionary:

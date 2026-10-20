@@ -87,3 +87,31 @@ static func key() -> Item:
 	_part(it, Vector3(0.012, 0, -0.095), Vector3(0.022, 0.008, 0.012), Color(0.85, 0.65, 0.25), 1.0)
 	_shape(it, Vector3(0, 0, -0.02), Vector3(0.05, 0.05, 0.16))
 	return it
+
+# Document à lire : on l'attrape (GRIP), on le rapproche du visage pour le lire.
+static func doc(title: String, text: String) -> Item:
+	var d := Item.new()
+	d.kind = "doc"
+	d.size_class = "small"
+	d.tip = Vector3(0, 0, -0.1)
+	d.damage = 0.0
+	d.set_meta("title", title)
+	d.set_meta("text", text)
+	_part(d, Vector3(0, 0, 0), Vector3(0.17, 0.006, 0.23), Color(0.93, 0.9, 0.8), 0.0)
+	for i in 5:
+		_part(d, Vector3(0, 0.004, -0.07 + i * 0.035), Vector3(0.12, 0.002, 0.008), Color(0.25, 0.22, 0.2))
+	_shape(d, Vector3.ZERO, Vector3(0.17, 0.03, 0.23))
+	d.grip_offset = Transform3D(Basis(Vector3.RIGHT, deg_to_rad(-75)), Vector3(0, 0.03, -0.08))
+	return d
+
+static func poincon(letter := "K") -> Item:
+	var p := Item.new()
+	p.kind = "poincon"
+	p.size_class = "small"
+	p.tip = Vector3(0, 0, -0.08)
+	p.damage = 0.0
+	_part(p, Vector3(0, 0, 0.02), Vector3(0.03, 0.03, 0.07), Color(0.18, 0.18, 0.22), 1.0)
+	_part(p, Vector3(0, 0, -0.04), Vector3(0.012, 0.012, 0.06), Color(0.7, 0.7, 0.75), 1.0)
+	_part(p, Vector3(0, 0, -0.075), Vector3(0.03, 0.03, 0.01), Color(0.3, 0.65, 1.0), 1.0)
+	_shape(p, Vector3.ZERO, Vector3(0.05, 0.05, 0.15))
+	return p

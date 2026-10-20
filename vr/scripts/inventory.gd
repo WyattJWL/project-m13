@@ -143,6 +143,12 @@ func stored_kinds() -> Array:
 func _physics_process(delta: float) -> void:
 	if rig == null or rig.cam == null:
 		return
+	for k in stored.keys():
+		if not is_instance_valid(stored[k]):
+			stored.erase(k)
+	for h in held.keys():
+		if not is_instance_valid(held[h]):
+			held.erase(h)
 	body_yaw = lerp_angle(body_yaw, rig.cam.global_rotation.y, clampf(delta * 4.0, 0.0, 1.0))
 	for hand in rig.hands:
 		var p: Vector3 = hand.global_position

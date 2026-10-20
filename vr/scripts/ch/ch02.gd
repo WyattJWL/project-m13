@@ -1,0 +1,55 @@
+extends RefCounted
+# Chapitre 2 : Celui qui porte son visage
+
+static func run(g) -> void:
+	await g.card_text("CHAPITRE 2", "CELUI QUI PORTE SON VISAGE\n\nDarius a caché le poinçon. Ses pouvoirs, eux, ne se cachent pas.")
+	await g.scene("lenoir")
+	await g.say("Darius", "Hier, j'ai retenu une tasse sans la toucher. Ce matin, je joue du piano sans avoir appris.")
+	g.doc("coupures", "Coupures de presse de Clara", "Un ancien pompier chute dans son escalier : « je ne sais plus tomber sans me faire mal ».\nUne pianiste annule son récital : « mes mains ne savent plus ».\n\nChaque talent pris à Darius est retiré à quelqu'un.", "desk")
+	g.obj("lis les coupures de presse sur le bureau")
+	await g.wait_read("coupures")
+	await g.say("Kayden", "(voix dans le poinçon) Un marché : une de tes cinq pages en attente, contre un poinçon qui ne coûtera plus qu'à toi.")
+	var c: int = await g.choice("Que réponds-tu ?", ["Ne rien répondre", "« D'accord. »"])
+	if c == 1:
+		await g.say("Darius", "Le mot reste coincé dans ma gorge. Je pense au pompier. Je ne dis rien.")
+	else:
+		await g.say("Darius", "Le silence aussi est une réponse. Kayden rit, très loin.")
+	await g.card_text("QUATRE JOURS PLUS TARD", "Darius est prisonnier de son propre corps. Kayden le dirige.")
+	await g.scene("caves")
+	g.npc("Alex", Vector3(2.0, 0, -4.0), Color(0.25, 0.4, 0.65))
+	await g.say("Clara", "Il nous a amenés ici exprès. Alex, regarde les murs. Moi, je m'occupe de la page.")
+	await g.say("Alex", "Des prénoms gravés partout. Celui de mon oncle... Ma mère dit qu'il n'a jamais existé.")
+	g.obj("repousse les Silhouettes (arme, Retenir)")
+	g.give("knife", Vector3(0.5, 0.2, 2.0))
+	g.give("bat", Vector3(-0.8, 0.2, 2.0))
+	await g.say("Clara", "Prends une arme, vite ! Elles arrivent !")
+	await g.fight(3, 60.0)
+	g.doc("page", "La page du collier", "PAGE 41\n\nUne année contre une vérité.\n\nQuelqu'un en a arraché la suite.", Vector3(0, 0.5, -24.0))
+	g.obj("amène la page à la lumière du fond")
+	await g.wait_read("page")
+	await g.say("Clara", "(elle jette son carnet sur la page) Reviens, Darius !")
+	await g.say("Darius", "... Clara ? Alex ? C'est moi. C'est vraiment moi.")
+	await g.say("Kayden", "Je reste tout au fond, Darius. Là où tu ne regardes jamais.")
+	await g.say("Clara", "À partir de maintenant, un mot de passe. Si on ne le connaît pas, ce n'est pas lui. Miel-Ambre.")
+	await g.scene("warehouse")
+	g.obj("ouvre la porte du fond : trois chiffres")
+	await g.say("Alex", "Un digicode à trois chiffres. Une page qui n'existe pas...")
+	var code := -1
+	while code != 1:
+		code = await g.choice("Digicode", ["041", "404", "413"])
+		if code == 1:
+			break
+		await g.say("Darius", "BIP. Code refusé. Quelque chose bouge dans les rayonnages.")
+		g.spawn_enemy("silhouette")
+		await g.fight(1, 30.0)
+	await g.scene("warehouse_open")
+	g.doc("programme", "PROGRAMME M.13, 13e essai, 1991", "Note du chercheur K. Vasseur :\n\nLe dispositif n'enregistre pas des souvenirs. Il enregistre ce qu'on a mis A LEUR PLACE.\nChaque mensonge dit par amour laisse un vide de forme exacte.\n\nNous l'appelons la machine à mensonges.", "terminal")
+	g.doc("indemn", "Demande d'indemnisation", "Demandeur : Franck L.\nObjet : participation d'un mineur au programme M.13 (1991).\nMotif : troubles de la mémoire persistants.\n\nTampon rouge : CLASSE SANS SUITE.", "cabinet")
+	g.obj("lis les documents de la salle M.13")
+	await g.wait_read("programme")
+	await g.wait_read("indemn")
+	await g.say("Alex", "Kayden Vasseur, dix-neuf ans, fils du chercheur. Disparu en 1994 en voulant sauver les données.")
+	await g.say("Clara", "Un écran vient d'afficher un seul mot : MERCI.")
+	g.doc("lettre", "Lettre ancienne", "... nous n'avions pas le choix. Le lieu réclame quelqu'un à chaque génération.\nNotre fils a été désigné pour porter la charge.\n\nQue Dieu nous pardonne de ne pas l'avoir caché mieux.", "letter")
+	await g.wait_read("lettre")
+	await g.say("Clara", "Kayden n'est pas un monstre. C'était un garçon. Désigné, comme toi.")

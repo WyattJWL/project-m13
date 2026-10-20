@@ -23,6 +23,7 @@ var power_text: Label3D
 var power_bar: MeshInstance3D
 var _was_ready := true
 var inventory
+var bounds := Rect2()      # zone jouable (x, z) ; taille nulle = pas de limite
 var menu_available := false     # le menu du poignet n'existe que pendant une partie
 var wrist_menu: Node3D
 var wrist_buttons: Dictionary = {}
@@ -477,6 +478,7 @@ func _physics_process(delta: float) -> void:
 		_locomotion(delta)
 	else:
 		_tele_marker.visible = false
+	_clamp_to_bounds()
 	_vignette_mat.set_shader_parameter("amount", _moving_amount if Settings.vignette else 0.0)
 	_vignette.visible = Settings.vignette and _moving_amount > 0.01
 	_moving_amount = move_toward(_moving_amount, 0.0, delta * 2.0)
@@ -549,6 +551,15 @@ func _teleport_aim(l: Vector2) -> void:
 			global_position = Vector3(_tele_target.x + offset.x, global_position.y, _tele_target.z + offset.z)
 			_moving_amount = 0.0
 		_tele_marker.visible = false
+
+func _clamp_to_bounds() -> void:
+	if bounds.size == Vector2.ZERO:
+		return
+	var c := cam.global_position
+	var cx := clampf(c.x, bounds.position.x, bounds.end.x)
+	var cz := clampf(c.z, bounds.position.y, bounds.end.y)
+	if cx != c.x or cz != c.z:
+		global_position += Vector3(cx - c.x, 0, cz - c.z)
 
 func _rotate_around_head(angle: float) -> void:
 	var head := cam.global_position

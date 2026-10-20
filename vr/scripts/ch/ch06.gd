@@ -1,0 +1,37 @@
+extends RefCounted
+# Chapitre 6 : La lignée de Darius
+
+static func run(g) -> void:
+	await g.card_text("CHAPITRE 6", "LA LIGNEE DE DARIUS\n\nClara cherche d'autres porteurs, entre 1962 et aujourd'hui.")
+	await g.scene("library")
+	g.npc("Mme Ferrand", "librarian", Color(0.45, 0.25, 0.4))
+	g.doc("coupure", "Coupure de 1978", "LE JEUNE DARIUS SAUVE UN ENFANT DE LA CRUE\n\nLuynes, novembre 1978.", "clipping")
+	g.obj("lis la coupure de presse de 1978")
+	await g.wait_read("coupure")
+	await g.say("Mme Ferrand", "Un Darius Templier, né en 1963. Il vit sur le coteau, à la mairie ils doivent avoir son adresse.")
+	await g.scene("mairie")
+	g.npc("Employée", "clerk", Color(0.4, 0.45, 0.55))
+	await g.say("Employée", "Templier ? La maison troglodytique, route du coteau. Il ne reçoit presque personne.")
+	await g.scene("templier")
+	g.npc("Templier", "templier", Color(0.45, 0.4, 0.3))
+	await g.say("Templier", "Tu as ses yeux, le garçon d'avant. Assieds-toi. Je vais te parler du puits et de la marge.")
+	await g.say("Templier", "Ma sœur a disparu en 1979. Personne ne se souvient d'elle. La chose se transmet par un lieu, pas par le sang.")
+	await g.say("Templier", "Elle est devenue affamée depuis la fermeture du programme, en 1994.")
+	g.give("poincon", "chest")
+	g.obj("prends le second poinçon (gravé T) dans le coffre")
+	await g.wait_held("poincon")
+	await g.say("Templier", "Un conseil : refuse toujours une demande trop grosse, quoi qu'elle promette.")
+	await g.scene("lenoir")
+	await g.say("Darius", "Je m'isole dans mon jeu. Je construis, je recommence, je ne parle plus à personne.")
+	g.npc("Clara", "franck", Color(0.7, 0.35, 0.3))
+	await g.say("Clara", "Tu nous remplaces par ton jeu, Darius !")
+	var c: int = await g.choice("Que réponds-tu ?", ["Tu as raison, pardon.", "Laisse-moi tranquille."])
+	if c == 0:
+		await g.say("Clara", "... Merci. On est là, tu sais.")
+	else:
+		await g.say("Clara", "Très bien. Mais on ne te lâchera pas.")
+	g.doc("sites", "Fichier de 1993 : sept sites", "TOURS, LUYNES, AMBOISE, CHINON, LOCHES, BLOIS, ORLEANS.\n\nSur la carte, ils forment un hexagone.\n\nTexte latin : le porte-dette reçoit une marque sur le corps.", "desk")
+	g.obj("lis le fichier des sept sites")
+	await g.wait_read("sites")
+	await g.say("Alex", "La marque sur le corps... c'est ma cicatrice.")
+	await g.say("Darius", "Je recopie tout, pour un futur successeur.")
