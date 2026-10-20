@@ -55,6 +55,13 @@ jobs:
           echo "${GODOT_VERSION}.stable" > android/.build_version
           touch android/build/.gdignore
 
+      - name: Déclarer les casques compatibles (exigé par Meta)
+        working-directory: vr
+        run: |
+          F=android/build/AndroidManifest.xml
+          grep -q "com.oculus.supportedDevices" "$F" || sed -i 's#</application>#    <meta-data android:name="com.oculus.supportedDevices" android:value="quest2|questpro|quest3|quest3s" />\n    </application>#' "$F"
+          grep -n "supportedDevices" "$F" || echo "ATTENTION : balise non ajoutée"
+
       - name: Keystore de release (depuis les secrets)
         env:
           KS_B64: ${{ secrets.VR_KEYSTORE_B64 }}
