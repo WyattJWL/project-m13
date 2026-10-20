@@ -61,7 +61,7 @@ jobs:
       - name: Déclarer les casques compatibles (exigé par Meta)
         working-directory: vr
         run: |
-          find android/build -name AndroidManifest.xml -not -path "*/build/*/build/*" | head -10
+          { echo '--- manifests'; find android/build -name AndroidManifest.xml -not -path '*/build/*/build/*' | head -10; echo '--- options plugin'; grep -rhoE '[a-z_]+_features/[a-z_0-9]+' addons/godotopenxrvendors 2>/dev/null | sort -u | head -60; echo '--- main manifest'; head -60 android/build/src/main/AndroidManifest.xml 2>/dev/null; } > /tmp/info.txt 2>&1
           F=android/build/src/main/AndroidManifest.xml
           if [ -f "$F" ]; then
             grep -q "com.oculus.supportedDevices" "$F" || sed -i 's#</application>#    <meta-data android:name="com.oculus.supportedDevices" android:value="quest2|questpro|quest3|quest3s" />\n    </application>#' "$F"
@@ -107,6 +107,8 @@ jobs:
           git checkout --orphan vr-apk-release
           git rm -rf . >/dev/null 2>&1 || true
           cp /tmp/apk/project-m13-vr-release.apk .
+          cp /tmp/info.txt info.txt 2>/dev/null || true
+          git add info.txt 2>/dev/null || true
           git add project-m13-vr-release.apk
           git commit -qm "APK VR release ${GITHUB_SHA}"
           git push -f origin vr-apk-release
