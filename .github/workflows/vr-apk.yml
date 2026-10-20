@@ -47,6 +47,8 @@ jobs:
           SRC=$(find /tmp/tmp_vendors -type d -name godotopenxrvendors | head -1)
           cp -r "$SRC" addons/
           ls addons/godotopenxrvendors | head
+          echo '--- options Meta du plugin ---'
+          grep -rhoE '"meta_xr_features/[a-z_0-9]+"|supportedDevices[^"]*' addons/godotopenxrvendors/editor 2>/dev/null | sort -u | head -25
 
       - name: Installer le modèle de build Android
         working-directory: vr
