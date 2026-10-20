@@ -85,7 +85,7 @@ func _build_all() -> void:
 	for key in ["easy", "normal", "hard"]:
 		var k: String = key
 		var info: Dictionary = Settings.DIFFICULTIES[k]
-		var sub := {"easy": "Ennemis lents, pouvoir rapide", "normal": "L'experience prevue", "hard": "Ennemis rapides, pouvoir lent"}[k]
+		var sub: String = {"easy": "Ennemis lents, pouvoir rapide", "normal": "L'experience prevue", "hard": "Ennemis rapides, pouvoir lent"}[k]
 		_button(d, "%s  -  %s" % [info["label"], sub], Vector3(0, yy, -3.0), func(): new_game.emit(_pending_slot, k), 4.6)
 		yy -= 0.42
 	_button(d, "RETOUR", Vector3(0, 0.5, -3.0), func(): _show("slots_new"))
