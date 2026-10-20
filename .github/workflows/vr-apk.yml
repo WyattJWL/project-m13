@@ -48,7 +48,7 @@ jobs:
           cp -r "$SRC" addons/
           ls addons/godotopenxrvendors | head
           echo '--- options Meta du plugin ---'
-          grep -rhoE '"meta_xr_features/[a-z_0-9]+"|supportedDevices[^"]*' addons/godotopenxrvendors/editor 2>/dev/null | sort -u | head -25
+          grep -rhoE '"meta_xr_features/[a-z_0-9]+"|supportedDevices[^"]*' addons/godotopenxrvendors/editor 2>/dev/null | sort -u | head -40 | tee /tmp/opts.txt
 
       - name: Installer le modèle de build Android
         working-directory: vr
@@ -108,6 +108,8 @@ jobs:
           git checkout --orphan vr-apk-build
           git rm -rf . >/dev/null 2>&1 || true
           cp /tmp/apk/project-m13-vr.apk .
+          cp /tmp/opts.txt options.txt 2>/dev/null || true
+          git add options.txt 2>/dev/null || true
           git add project-m13-vr.apk
           git commit -qm "APK VR ${GITHUB_SHA}"
           git push -f origin vr-apk-build
