@@ -39,6 +39,7 @@ jobs:
           USER_TOKEN: ${{ secrets.META_USER_TOKEN }}
         run: |
           mask() { sed -E "s/(secret|token)[= ][^ ]+/\1=***/Ig"; }
+          APP_SECRET="${APP_SECRET##*|}"   # accepte « OC|id|secret » ou le secret seul
           echo "longueurs : secret=${#APP_SECRET} token=${#USER_TOKEN}"
           for MODE in secret token; do
             if [ "$MODE" = "secret" ]; then [ -n "$APP_SECRET" ] || continue; AUTH=(--app_secret "$APP_SECRET"); else [ -n "$USER_TOKEN" ] || continue; AUTH=(--token "$USER_TOKEN"); fi
