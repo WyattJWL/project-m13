@@ -15,12 +15,14 @@ signal released(controller: XRController3D)
 const Hands := preload("res://scripts/hands.gd")
 const Sfx := preload("res://scripts/sfx.gd")
 const Button3D := preload("res://scripts/button3d.gd")
+const Inventory := preload("res://scripts/inventory.gd")
 var cam: XRCamera3D
 var visuals: Dictionary = {}     # XRController3D -> { hand, ctrl, tag, part }
 var power_ui: Node3D
 var power_text: Label3D
 var power_bar: MeshInstance3D
 var _was_ready := true
+var inventory
 var menu_available := false     # le menu du poignet n'existe que pendant une partie
 var wrist_menu: Node3D
 var wrist_buttons: Dictionary = {}
@@ -63,6 +65,9 @@ func _ready() -> void:
 	_build_marker()
 	_build_power_ui()
 	_build_wrist_menu()
+	inventory = Inventory.new()
+	inventory.rig = self
+	add_child(inventory)
 	_build_vignette()
 	position.y = 0.4 if Settings.seated else 0.0
 
@@ -179,6 +184,8 @@ func _on_button(name: String, hand: XRController3D) -> void:
 			if ui_enabled and target and is_instance_valid(target):
 				target.press()
 		"grip_click":
+			if inventory.on_grip(hand):
+				return
 			if telekinesis_enabled and _try_telekinesis(hand):
 				return
 			grabbed.emit(hand)
@@ -191,6 +198,8 @@ func _on_button(name: String, hand: XRController3D) -> void:
 
 func _on_release(name: String, hand: XRController3D) -> void:
 	if name == "grip_click":
+		if inventory.on_release(hand):
+			return
 		if held.has(hand):
 			_drop(hand, false)
 		released.emit(hand)

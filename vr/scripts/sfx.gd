@@ -84,6 +84,28 @@ static func get_sound(name: String) -> AudioStreamWAV:
 			f = func(t, i, n):
 				st[0] = st[0] * 0.8 + rng.randf_range(-1.0, 1.0) * 0.2
 				return (st[0] * 1.2 + sin(TAU * 70.0 * t) * 0.6) * exp(-t * 30.0)
+		"key_in":
+			secs = 0.12
+			f = func(t, i, n): return (sin(TAU * 3200.0 * t) * 0.4 + sin(TAU * 4700.0 * t) * 0.25) * exp(-t * 55.0)
+		"key_turn":
+			secs = 0.2
+			f = func(t, i, n): return sin(TAU * 1800.0 * t) * exp(-fmod(t, 0.05) * 90.0) * 0.5
+		"unlock":
+			secs = 0.25
+			f = func(t, i, n): return (sin(TAU * 600.0 * t) * 0.6 + sin(TAU * 1900.0 * t) * 0.4) * exp(-t * 30.0)
+		"creak":
+			secs = 0.7
+			f = func(t, i, n):
+				var fr := 130.0 + 40.0 * sin(t * 9.0)
+				return (fmod(t * fr, 1.0) * 2.0 - 1.0) * 0.35 * sin(PI * t / 0.7) * (0.6 + 0.4 * sin(t * 40.0))
+		"thud":
+			secs = 0.4
+			f = func(t, i, n):
+				st[0] = st[0] * 0.8 + rng.randf_range(-1.0, 1.0) * 0.2
+				return (sin(TAU * 60.0 * t) * 0.9 + st[0] * 0.4) * exp(-t * 11.0)
+		"stow":
+			secs = 0.12
+			f = func(t, i, n): return sin(TAU * 700.0 * t) * exp(-t * 50.0) * 0.5
 		"tk_grab":
 			secs = 0.4
 			f = func(t, i, n): return sin(TAU * (300.0 + sin(t * 40.0) * 60.0 + 400.0 * t) * t) * sin(PI * t / 0.4) * 0.45

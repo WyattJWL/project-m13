@@ -313,3 +313,29 @@ static func page(text := "") -> Node3D:
 		_visual_box(n, Vector3(0, 0.08 - i * 0.035, 0.003), Vector3(0.12, 0.006, 0.002), Color(0.25, 0.22, 0.2))
 	World.light(n, Vector3.ZERO, Color(0.5, 0.75, 1.0), 0.6, 1.8)
 	return n
+
+# Petite cabane en bois : l'ouverture de la porte fait 1 m (x de -0.5 à 0.5), la porte est ajoutée à part.
+static func hut(parent: Node, pos: Vector3) -> void:
+	var n := Node3D.new()
+	n.position = pos
+	parent.add_child(n)
+	var wood := Color(0.3, 0.2, 0.13)
+	World.box(n, Vector3(-1.25, 0, 0), Vector3(1.5, 2.6, 0.15), wood, 0.0, true)
+	World.box(n, Vector3(1.25, 0, 0), Vector3(1.5, 2.6, 0.15), wood, 0.0, true)
+	World.box(n, Vector3(0, 2.1, 0), Vector3(1.0, 0.5, 0.15), wood, 0.0, true)
+	World.box(n, Vector3(-1.95, 0, -1.5), Vector3(0.15, 2.6, 3.0), wood, 0.0, true)
+	World.box(n, Vector3(1.95, 0, -1.5), Vector3(0.15, 2.6, 3.0), wood, 0.0, true)
+	World.box(n, Vector3(0, 0, -3.0), Vector3(4.0, 2.6, 0.15), wood, 0.0, true)
+	World.box(n, Vector3(0, -0.02, -1.5), Vector3(4.0, 0.04, 3.0), Color(0.22, 0.15, 0.1), 0.0, true)
+	for side in [-1, 1]:
+		var roof := MeshInstance3D.new()
+		var bm := BoxMesh.new()
+		bm.size = Vector3(2.5, 0.12, 3.6)
+		roof.mesh = bm
+		roof.position = Vector3(1.05 * side, 3.1, -1.5)
+		roof.rotation_degrees.z = -28.0 * side
+		roof.material_override = World.mat(Color(0.2, 0.13, 0.1), 0.0, 0.9)
+		n.add_child(roof)
+	World.light(n, Vector3(0, 1.8, -1.5), Color(1.0, 0.75, 0.4), 1.6, 5.0)
+	World.box(n, Vector3(0, 0, -2.4), Vector3(1.4, 0.8, 0.7), Color(0.34, 0.23, 0.14), 0.0, true)
+	lantern(n, Vector3(0.0, 0.8, -2.4), Color(1.0, 0.75, 0.4), false)

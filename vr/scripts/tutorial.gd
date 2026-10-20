@@ -8,6 +8,8 @@ const World := preload("res://scripts/world.gd")
 const Props := preload("res://scripts/props.gd")
 const Button3D := preload("res://scripts/button3d.gd")
 const Sfx := preload("res://scripts/sfx.gd")
+const Items := preload("res://scripts/items.gd")
+const DoorScript := preload("res://scripts/door.gd")
 
 var rig
 var hud: Node3D
@@ -31,6 +33,12 @@ var survive_left := 0.0
 var hits := 0
 var light: OmniLight3D
 var beacon: Array[Node3D] = []
+var dummy: Node3D
+var dummy_hits := 0
+var door
+var door_open := false
+var hits_taken := 0
+var stun_until := 0.0
 var _alive := true
 
 func _ready() -> void:
@@ -218,21 +226,71 @@ func _run() -> void:
 	light.light_energy = 4.0
 	await _say("Darius", "Le temps ralentit... C'est ça, « retenir ».")
 	light.light_energy = 2.4
-	# 8. Fuir
-	_set_objective("survis 20 secondes")
+	# 8. Armes et rangements
+	_spawn_weapons()
+	_set_objective("prends le couteau sur la table")
+	await _say("Darius", "Sur cette table : un couteau et une batte. Je ne peux pas me défendre à mains nues.")
+	_hint("Main près de l'arme, maintiens GRIP pour la saisir.")
+	rig.hint_controller("both", "grip")
+	await _wait(func(): return _holding("knife"))
+	_set_objective("frappe le mannequin 3 fois")
+	await _say("Darius", "Un mannequin d'entraînement. Un geste franc suffit.")
+	_hint("Balance un coup rapide dans le mannequin (%d/3)." % 0)
+	dummy_hits = 0
+	await _wait(func():
+		_hint("Balance un coup rapide dans le mannequin (%d/3)." % dummy_hits)
+		return dummy_hits >= 3)
+	rig.hint_controller("", "")
+	_set_objective("range le couteau : poche (hanche) ou torse")
+	await _say("Darius", "Les petits objets se rangent aux poches, sur les hanches, ou sur le torse.")
+	_hint("Relâche GRIP près d'un point doré. Le couteau est petit : hanche ou torse.")
+	await _wait(func(): return rig.inventory.stored_kinds().has("knife"))
+	_set_objective("range la batte sur une épaule")
+	await _say("Darius", "Les armes longues vont dans le dos, par-dessus l'épaule.")
+	_hint("Prends la batte, puis passe la main derrière l'épaule et relâche GRIP.")
+	await _wait(func(): return rig.inventory.has_in("shoulder_r") or rig.inventory.has_in("shoulder_l"))
+	_set_objective("dégaine une arme")
+	_hint("GRIP à l'endroit du rangement (épaule, hanche, torse) pour la sortir.")
+	await _wait(func(): return _holding("bat") or _holding("knife"))
+	# 9. Fuir ou se battre
+	_set_objective("repousse la Silhouette ou survis 20 secondes")
 	_build_silhouette()
-	await _say("Darius", "Une Silhouette ! Elle me prendra un souvenir si elle me touche. Recule, ou utilise Retenir !")
-	_hint("%s = Retenir. Éloigne-toi d'elle avec le stick gauche." % rig.power_button_name())
+	await _say("Darius", "Une Silhouette ! Frappe-la, elle recule après 3 coups. Ou utilise Retenir.")
+	_hint("Frappe-la, recule (stick gauche) ou utilise %s : Retenir." % rig.power_button_name())
 	rig.hint_controller("dom", "a")
 	survive_left = 20.0
+	hits_taken = 0
 	await _wait(func(): return survive_left <= 0.0)
 	silhouette.visible = false
 	rig.hint_controller("", "")
 	show_power = false
 	power_label.text = ""
 	_hint("")
+	await _say("Darius", "Elle est partie. Il y a une cabane au bout du chemin.")
+	# 10. Clé et porte
+	_spawn_hut()
+	_set_objective("prends la clé sur la souche")
+	await _say("Darius", "Une clé, sur cette souche. Elle doit ouvrir la porte de la cabane.")
+	_hint("GRIP près de la clé. Si ta main est pleine, range ton arme d'abord.")
+	rig.hint_controller("both", "grip")
+	await _wait(func(): return _holding("key"))
+	_set_objective("enfonce la clé dans la serrure")
+	await _say("Darius", "Marche jusqu'à la porte. La serrure est sur le côté, près de la poignée.")
+	_hint("Approche le bout de la clé du trou de la serrure.")
+	rig.hint_controller("", "")
+	await _wait(func(): return door.state != "locked")
+	_set_objective("tourne la clé")
+	_hint("Tourne ton poignet comme une vraie clé (environ un quart de tour).")
+	await _wait(func(): return door.state == "unlocked")
+	_set_objective("ouvre la porte par la poignée")
+	await _say("Darius", "Clic. Maintenant, la poignée.")
+	_hint("GRIP sur la poignée en laiton, puis tire vers toi.")
+	rig.hint_controller("both", "grip")
+	await _wait(func(): return door_open)
+	rig.hint_controller("", "")
+	_hint("")
 	_set_objective("")
-	await _say("Darius", "Elle est partie. Je crois que je sais me servir de ce que j'ai. Le Non-lieu m'attend.")
+	await _say("Darius", "Elle s'ouvre. Je sais me défendre, me protéger, déplacer les choses et ouvrir les portes. Le Non-lieu m'attend.")
 	Settings.mark_tutorial_done()
 	var btn := Button3D.new()
 	btn.text = "RETOUR AU MENU"
@@ -243,8 +301,72 @@ func _run() -> void:
 	btn.rotation.y = yaw
 	add_child(btn)
 	btn.pressed.connect(func(): finished.emit())
-	rig.hint_controller("right", "trigger")
+	rig.hint_controller("dom", "trigger")
 	_say("", "Tutoriel terminé. Bravo !")
+
+func _holding(kind: String) -> bool:
+	for h in rig.hands:
+		var it = rig.inventory.held_item(h)
+		if it != null and it.kind == kind:
+			return true
+	return false
+
+# ---------- Armes, mannequin, cabane ----------
+func _spawn_weapons() -> void:
+	var table := Node3D.new()
+	table.position = Vector3(-3.2, 0, -13.0)
+	add_child(table)
+	World.box(table, Vector3(0, 0.0, 0), Vector3(1.3, 0.78, 0.7), Color(0.34, 0.23, 0.14), 0.0, true)
+	World.box(table, Vector3(0, 0.78, 0), Vector3(1.4, 0.05, 0.8), Color(0.45, 0.31, 0.19))
+	var k := Items.knife()
+	k.position = Vector3(-3.55, 0.9, -13.0)
+	k.rotation_degrees.y = 20
+	add_child(k)
+	var b := Items.bat()
+	b.position = Vector3(-2.7, 0.9, -12.8)
+	b.rotation_degrees.y = 90
+	add_child(b)
+	# mannequin d'entraînement (poteau, sac, tête, bras)
+	var d := Node3D.new()
+	d.position = Vector3(2.8, 0, -13.5)
+	add_child(d)
+	dummy = d
+	World.box(d, Vector3(0, 0, 0), Vector3(0.12, 1.9, 0.12), Color(0.35, 0.24, 0.15), 0.0, true)
+	World.box(d, Vector3(0, 1.25, 0), Vector3(0.5, 0.55, 0.3), Color(0.55, 0.45, 0.3))
+	World.box(d, Vector3(0, 1.45, 0), Vector3(1.0, 0.1, 0.1), Color(0.35, 0.24, 0.15))
+	var head := MeshInstance3D.new()
+	var sm := SphereMesh.new()
+	sm.radius = 0.15
+	sm.height = 0.3
+	head.mesh = sm
+	head.position = Vector3(0, 1.85, 0)
+	head.material_override = World.mat(Color(0.6, 0.5, 0.35))
+	d.add_child(head)
+	d.add_to_group("hittable")
+	d.set_meta("center", Vector3(0, 1.3, 0))
+	d.set_meta("radius", 0.6)
+	d.set_meta("on_hit", Callable(self, "_dummy_hit"))
+
+func _dummy_hit(dir: Vector3, power: float) -> void:
+	dummy_hits += 1
+	Sfx.play(self, "thud", dummy.global_position, -2.0)
+	var tw := create_tween()
+	tw.tween_property(dummy, "rotation:z", clampf(-dir.x * 0.25, -0.3, 0.3), 0.06)
+	tw.tween_property(dummy, "rotation:z", 0.0, 0.35).set_trans(Tween.TRANS_ELASTIC)
+
+func _spawn_hut() -> void:
+	Props.stump(self, Vector3(-2.6, 0, -33.0))
+	var k := Items.key()
+	k.position = Vector3(-2.6, 0.82, -33.0)
+	k.rotation_degrees.y = 35
+	add_child(k)
+	Props.hut(self, Vector3(0, 0, -38.0))
+	door = DoorScript.new()
+	door.position = Vector3(-0.5, 0, -38.0)
+	add_child(door)
+	door.setup(rig, rig.inventory)
+	door.opened.connect(func(): door_open = true)
+	Sfx.play(self, "pickup", null, -10.0)
 
 func _facing_stone() -> bool:
 	var to: Vector3 = Vector3(7.0, 0, -9.5) - rig.cam.global_position
@@ -327,11 +449,26 @@ func _build_silhouette() -> void:
 	silhouette.add_child(cloak)
 	for ex in [-0.09, 0.09]:
 		World.box(silhouette, Vector3(ex, 1.55, -0.24), Vector3(0.07, 0.03, 0.02), Color(0.7, 0.9, 1.0), 5.0)
+	silhouette.add_to_group("hittable")
+	silhouette.set_meta("center", Vector3(0, 1.0, 0))
+	silhouette.set_meta("radius", 0.6)
+	silhouette.set_meta("on_hit", Callable(self, "_silhouette_hit"))
 	Sfx.play(self, "whisper", null, -6.0)
 	var cam_pos: Vector3 = rig.cam.global_position
 	silhouette.global_position = Vector3(cam_pos.x + 4.0, 0, cam_pos.z - 13.0)
 
+func _silhouette_hit(dir: Vector3, power: float) -> void:
+	hits_taken += 1
+	stun_until = Time.get_ticks_msec() / 1000.0 + 1.0
+	silhouette.global_position += Vector3(dir.x, 0, dir.z).normalized() * 1.6
+	Sfx.play(self, "hurt", silhouette.global_position, -4.0)
+	if hits_taken >= 3:
+		survive_left = 0.0
+
 func _update_silhouette(delta: float) -> void:
+	if Time.get_ticks_msec() / 1000.0 < stun_until:
+		survive_left -= delta
+		return
 	var target: Vector3 = rig.cam.global_position
 	target.y = 0.0
 	var pos: Vector3 = silhouette.global_position
