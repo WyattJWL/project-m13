@@ -68,6 +68,11 @@ jobs:
       - name: Vérifier les scripts (erreurs de syntaxe)
         working-directory: vr
         run: |
+          # « Settings » est un autoload : inconnu en mode vérification seule, on le remplace dans une copie.
+          rm -rf /tmp/vrcheck && cp -r . /tmp/vrcheck && cd /tmp/vrcheck
+          for f in scripts/*.gd; do
+            [ "$f" = "scripts/settings.gd" ] || sed -i 's#\bSettings\.#(preload("res://scripts/settings.gd").new()).#g' "$f"
+          done
           FAIL=0
           for f in scripts/*.gd; do
             OUT=$(godot --headless --path . --check-only --script "res://$f" 2>&1 || true)
