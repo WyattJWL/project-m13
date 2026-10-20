@@ -142,7 +142,7 @@ func _turn_key(delta: float) -> void:
 			rig._haptic(key_hand, 0.3)
 			_creak_t = 0.25
 	roll = new_roll
-	var tip_local := key_item.tip
+	var tip_local: Vector3 = key_item.tip
 	var b := Basis(Vector3(0, 0, 1), roll)
 	var pos: Vector3 = keyhole.global_position + Vector3(0, 0, 0.02)
 	key_item.global_transform = Transform3D(b, pos - b * tip_local)
