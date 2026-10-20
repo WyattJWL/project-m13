@@ -34,8 +34,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           apt-get update -qq && apt-get install -y -qq jq unzip curl >/dev/null
-          URL=$(curl -sH "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/GodotVR/godot_openxr_vendors/releases/latest \
-            | jq -r '[.assets[] | select(.name | test("addon.*\\.zip$|vendors.*\\.zip$"))][0].browser_download_url')
+          curl -sH "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/GodotVR/godot_openxr_vendors/releases/latest > rel.json
+          jq -r '.tag_name, (.assets[].name)' rel.json
+          URL=$(jq -r '[.assets[] | select(.name | test("symbols") | not) | select(.name | test("\\.zip$"))] | (map(select(.name | test("release"))) + .)[0].browser_download_url' rel.json)
           echo "Plugin: $URL"
           curl -sL "$URL" -o vendors.zip
           mkdir -p tmp_vendors && unzip -q vendors.zip -d tmp_vendors
