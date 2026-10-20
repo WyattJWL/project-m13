@@ -61,9 +61,14 @@ jobs:
       - name: Déclarer les casques compatibles (exigé par Meta)
         working-directory: vr
         run: |
-          F=android/build/AndroidManifest.xml
-          grep -q "com.oculus.supportedDevices" "$F" || sed -i 's#</application>#    <meta-data android:name="com.oculus.supportedDevices" android:value="quest2|questpro|quest3|quest3s" />\n    </application>#' "$F"
-          grep -n "supportedDevices" "$F" || echo "ATTENTION : balise non ajoutée"
+          find android/build -name AndroidManifest.xml -not -path "*/build/*/build/*" | head -10
+          F=android/build/src/main/AndroidManifest.xml
+          if [ -f "$F" ]; then
+            grep -q "com.oculus.supportedDevices" "$F" || sed -i 's#</application>#    <meta-data android:name="com.oculus.supportedDevices" android:value="quest2|questpro|quest3|quest3s" />\n    </application>#' "$F"
+            grep -n "supportedDevices" "$F" || echo "ATTENTION : balise non ajoutée"
+          else
+            echo "ATTENTION : manifeste principal introuvable, balise non ajoutée"
+          fi
 
       - name: Keystore de release (depuis les secrets)
         env:
