@@ -25,6 +25,8 @@ var survive := 0.0
 var done_button: Node
 var _powered := false
 var _reading := false
+var target_hit := false
+var crates: Array[RigidBody3D] = []
 var _flash: OmniLight3D
 
 const STEPS := [
@@ -33,6 +35,7 @@ const STEPS := [
 	{"title": "TOURNER", "text": ""},
 	{"title": "ATTRAPER", "text": "Approche une main de la page lumineuse\net maintiens le bouton GRIP pour l'attraper."},
 	{"title": "LIRE", "text": "Amene la page pres de ton visage\npour la lire."},
+	{"title": "TELEKINESIE", "text": "Vise une caisse avec le laser et maintiens GRIP :\nelle flotte. Bouge la main pour la deplacer,\nle stick avant/arriere pour l'eloigner / rapprocher.\nGACHETTE = la lancer. Touche la cible bleue !"},
 	{"title": "LE POUVOIR : RETENIR", "text": "Appuie sur A (main droite).\nPendant 5 secondes, tu es protege.\nRecharge : 12 secondes."},
 	{"title": "FUIR", "text": "Une Silhouette arrive. Elle t'arrache un souvenir\nsi elle te touche. Utilise RETENIR (A) ou recule.\nTiens 20 secondes."},
 	{"title": "TUTORIEL TERMINE", "text": "Tu es pret. Le Non-lieu t'attend."}
@@ -109,13 +112,15 @@ func _next() -> void:
 		3:
 			page.visible = true
 		5:
-			_powered = false
+			_spawn_crates()
 		6:
+			_powered = false
+		7:
 			silhouette.visible = true
 			silhouette.global_position = Vector3(0, 0, -9)
 			survive = 0.0
 			hit_count = 0
-		7:
+		8:
 			Settings.tutorial_done = true
 			Settings.save()
 			rig.movement_enabled = false
@@ -155,9 +160,14 @@ func _process(delta: float) -> void:
 					page.visible = false
 					_next()
 		5:
-			if _powered and step_time > 1.0:
+			if target_hit:
+				target_hit = false
+				_clear_crates()
 				_next()
 		6:
+			if _powered and step_time > 1.0:
+				_next()
+		7:
 			_update_silhouette(delta)
 
 func _update_silhouette(delta: float) -> void:
@@ -198,3 +208,58 @@ func _on_grab(hand: XRController3D) -> void:
 func _on_release(hand: XRController3D) -> void:
 	if hand == held_by and step != 4:
 		held_by = null
+
+# ---- Télékinésie : des caisses à soulever de loin et une cible à toucher ----
+func _spawn_crates() -> void:
+	var target_area := Area3D.new()
+	target_area.collision_layer = 0
+	target_area.collision_mask = 4
+	target_area.position = Vector3(0, 1.6, -9.0)
+	var cs := CollisionShape3D.new()
+	var sph := SphereShape3D.new()
+	sph.radius = 1.0
+	cs.shape = sph
+	target_area.add_child(cs)
+	var ring := MeshInstance3D.new()
+	var tm := TorusMesh.new()
+	tm.inner_radius = 0.85
+	tm.outer_radius = 1.0
+	ring.mesh = tm
+	ring.rotation.x = PI / 2.0
+	ring.material_override = World.mat(Color(0.3, 0.7, 1.0), 3.0)
+	target_area.add_child(ring)
+	target_area.name = "TkTarget"
+	add_child(target_area)
+	target_area.body_entered.connect(func(body):
+		if body is RigidBody3D and body.is_in_group("grabbable"):
+			target_hit = true
+	)
+	for i in 4:
+		var rb := RigidBody3D.new()
+		rb.collision_layer = 4
+		rb.collision_mask = 1 | 4
+		rb.mass = 2.0
+		rb.add_to_group("grabbable")
+		var shape := CollisionShape3D.new()
+		var bs := BoxShape3D.new()
+		bs.size = Vector3(0.5, 0.5, 0.5)
+		shape.shape = bs
+		rb.add_child(shape)
+		var mesh := MeshInstance3D.new()
+		var bm := BoxMesh.new()
+		bm.size = Vector3(0.5, 0.5, 0.5)
+		mesh.mesh = bm
+		mesh.material_override = World.mat(Color(0.55, 0.4, 0.28), 0.0)
+		rb.add_child(mesh)
+		rb.position = Vector3(-2.0 + i * 1.4, 0.4, -4.0 - i * 0.6)
+		add_child(rb)
+		crates.append(rb)
+
+func _clear_crates() -> void:
+	for rb in crates:
+		if is_instance_valid(rb):
+			rb.queue_free()
+	crates.clear()
+	var t := get_node_or_null("TkTarget")
+	if t:
+		t.queue_free()

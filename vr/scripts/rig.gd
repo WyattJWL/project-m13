@@ -5,6 +5,8 @@ extends XROrigin3D
 # A (main droite) = pouvoir « Retenir ».
 
 signal power_used
+signal telekinesis_grab(body: RigidBody3D)
+signal telekinesis_launch(body: RigidBody3D)
 signal grabbed(controller: XRController3D)
 signal released(controller: XRController3D)
 
@@ -14,6 +16,11 @@ var lasers: Dictionary = {}     # XRController3D -> RayCast3D
 var beams: Dictionary = {}      # XRController3D -> MeshInstance3D
 var hover: Dictionary = {}      # XRController3D -> Button3D survolé
 var movement_enabled := false
+var telekinesis_enabled := true
+var held: Dictionary = {}       # XRController3D -> RigidBody3D tenu à distance
+var hold_dist: Dictionary = {}
+var hand_prev: Dictionary = {}
+var hand_vel: Dictionary = {}
 var ui_enabled := true
 var power_cooldown := 0.0
 var protected_until := 0.0
@@ -64,7 +71,7 @@ func _build_hand(hand: XRController3D) -> void:
 	ray.target_position = Vector3(0, 0, -8)
 	ray.collide_with_areas = true
 	ray.collide_with_bodies = true
-	ray.collision_mask = 3
+	ray.collision_mask = 7
 	hand.add_child(ray)
 	lasers[hand] = ray
 	var beam := MeshInstance3D.new()
@@ -130,10 +137,15 @@ func head_yaw() -> float:
 func _on_button(name: String, hand: XRController3D) -> void:
 	match name:
 		"trigger_click":
+			if held.has(hand):
+				_launch(hand)
+				return
 			var target = hover.get(hand)
 			if ui_enabled and target and is_instance_valid(target):
 				target.press()
 		"grip_click":
+			if telekinesis_enabled and _try_telekinesis(hand):
+				return
 			grabbed.emit(hand)
 		"ax_button":
 			if hand == right():
@@ -141,7 +153,76 @@ func _on_button(name: String, hand: XRController3D) -> void:
 
 func _on_release(name: String, hand: XRController3D) -> void:
 	if name == "grip_click":
+		if held.has(hand):
+			_drop(hand, false)
 		released.emit(hand)
+
+# ---- Télékinésie : attraper un objet de loin au laser (GRIP), le déplacer avec la main,
+# ---- le rapprocher / l'éloigner avec le stick, le lâcher ou le lancer (GÂCHETTE = tir puissant).
+func _try_telekinesis(hand: XRController3D) -> bool:
+	var ray: RayCast3D = lasers[hand]
+	if not ray.is_colliding():
+		return false
+	var body = ray.get_collider()
+	if not (body is RigidBody3D) or not body.is_in_group("grabbable"):
+		return false
+	for other in held:
+		if held[other] == body:
+			_drop(other, false)
+			break
+	held[hand] = body
+	hold_dist[hand] = clampf(ray.global_position.distance_to(body.global_position), 0.6, 12.0)
+	body.gravity_scale = 0.0
+	body.linear_damp = 4.0
+	body.angular_damp = 3.0
+	body.sleeping = false
+	_haptic(hand, 0.7)
+	telekinesis_grab.emit(body)
+	return true
+
+func _drop(hand: XRController3D, launch: bool) -> void:
+	var body: RigidBody3D = held.get(hand)
+	held.erase(hand)
+	hold_dist.erase(hand)
+	if body == null or not is_instance_valid(body):
+		return
+	body.gravity_scale = 1.0
+	body.linear_damp = 0.1
+	body.angular_damp = 0.5
+	if launch:
+		var forward := -hand.global_basis.z
+		body.linear_velocity = forward * 16.0
+		body.angular_velocity = Vector3(randf_range(-4, 4), randf_range(-4, 4), randf_range(-4, 4))
+		_haptic(hand, 1.0)
+		telekinesis_launch.emit(body)
+	else:
+		# lâcher en mouvement = jeter avec la vitesse de la main
+		body.linear_velocity = (hand_vel.get(hand, Vector3.ZERO) as Vector3) * 1.8
+
+func _launch(hand: XRController3D) -> void:
+	_drop(hand, true)
+
+func _update_telekinesis(delta: float) -> void:
+	for hand in hands:
+		var pos := hand.global_position
+		if hand_prev.has(hand):
+			var v: Vector3 = (pos - hand_prev[hand]) / maxf(delta, 0.001)
+			hand_vel[hand] = (hand_vel.get(hand, Vector3.ZERO) as Vector3).lerp(v, 0.35)
+		hand_prev[hand] = pos
+		if not held.has(hand):
+			continue
+		var body: RigidBody3D = held[hand]
+		if not is_instance_valid(body):
+			held.erase(hand)
+			continue
+		# stick vers l'avant = éloigner, vers l'arrière = rapprocher
+		var stick := hand.get_vector2("primary")
+		if absf(stick.y) > 0.2:
+			hold_dist[hand] = clampf(hold_dist[hand] + stick.y * 4.0 * delta, 0.5, 14.0)
+		var target := pos + (-hand.global_basis.z) * float(hold_dist[hand])
+		body.linear_velocity = ((target - body.global_position) * 12.0).limit_length(25.0)
+		body.angular_velocity = body.angular_velocity.lerp(Vector3.ZERO, 0.1)
+		(beams[hand].material_override as StandardMaterial3D).emission = Color(1.0, 0.45, 0.9)
 
 func use_power() -> void:
 	if power_cooldown > 0.0:
@@ -160,6 +241,10 @@ func _haptic(hand: XRController3D, strength: float) -> void:
 func _physics_process(delta: float) -> void:
 	power_cooldown = maxf(0.0, power_cooldown - delta)
 	_update_lasers()
+	_update_telekinesis(delta)
+	for hand in hands:
+		if not held.has(hand):
+			(beams[hand].material_override as StandardMaterial3D).emission = Color(0.4, 0.75, 1.0)
 	if movement_enabled:
 		_locomotion(delta)
 	else:
@@ -192,7 +277,7 @@ func _update_lasers() -> void:
 
 func _locomotion(delta: float) -> void:
 	# Rotation (stick droit)
-	var r := right().get_vector2("primary")
+	var r := right().get_vector2("primary") if not held.has(right()) else Vector2.ZERO
 	if Settings.turn_mode == "snap":
 		if absf(r.x) > 0.7 and _snap_ready:
 			_rotate_around_head(-signf(r.x) * deg_to_rad(Settings.snap_degrees))
@@ -203,7 +288,7 @@ func _locomotion(delta: float) -> void:
 		_rotate_around_head(-r.x * deg_to_rad(90.0) * delta)
 		_moving_amount = maxf(_moving_amount, 0.4)
 	# Déplacement (stick gauche)
-	var l := left().get_vector2("primary")
+	var l := left().get_vector2("primary") if not held.has(left()) else Vector2.ZERO
 	if Settings.move_mode == "smooth":
 		_tele_marker.visible = false
 		if l.length() > 0.2:
