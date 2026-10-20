@@ -1,0 +1,79 @@
+# Compile l'APK de test PROJECT-M13 VR (Meta Quest) avec Godot + OpenXR Vendors.
+# Résultat : artefact « project-m13-vr-apk » (APK signé avec une clé de debug jetable, installable sur Quest).
+name: Build VR APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["claude/m13-second-book-**"]
+    paths: ["vr/**", ".github/workflows/vr-apk.yml"]
+
+env:
+  GODOT_VERSION: "4.4.1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.4.1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Préparer Godot (modèles d'export, réglages Android)
+        run: |
+          mkdir -p ~/.local/share/godot ~/.config/godot
+          cp -r /root/.local/share/godot/export_templates ~/.local/share/godot/ || true
+          cp /root/.config/godot/editor_settings* ~/.config/godot/ 2>/dev/null || true
+          ls ~/.local/share/godot/export_templates || true
+          ls ~/.config/godot || true
+          echo "ANDROID_SDK: ${ANDROID_SDK_ROOT:-/usr/lib/android-sdk}"
+
+      - name: Télécharger le plugin Meta Quest (Godot OpenXR Vendors)
+        working-directory: vr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          apt-get update -qq && apt-get install -y -qq jq unzip curl >/dev/null
+          URL=$(curl -sH "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/GodotVR/godot_openxr_vendors/releases/latest \
+            | jq -r '[.assets[] | select(.name | test("addon.*\\.zip$|vendors.*\\.zip$"))][0].browser_download_url')
+          echo "Plugin: $URL"
+          curl -sL "$URL" -o vendors.zip
+          mkdir -p tmp_vendors && unzip -q vendors.zip -d tmp_vendors
+          mkdir -p addons
+          # le zip contient addons/godotopenxrvendors (ou un dossier parent)
+          SRC=$(find tmp_vendors -type d -name godotopenxrvendors | head -1)
+          cp -r "$SRC" addons/
+          ls addons/godotopenxrvendors | head
+
+      - name: Installer le modèle de build Android
+        working-directory: vr
+        run: |
+          mkdir -p android/build
+          unzip -q ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/android_source.zip -d android/build
+          echo "${GODOT_VERSION}.stable" > android/.build_version
+          touch android/build/.gdignore
+
+      - name: Clé de debug jetable
+        run: |
+          keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore /tmp/debug.keystore \
+            -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12
+
+      - name: Importer le projet
+        working-directory: vr
+        run: godot --headless --import || true
+
+      - name: Exporter l'APK
+        working-directory: vr
+        env:
+          GODOT_ANDROID_KEYSTORE_DEBUG_PATH: /tmp/debug.keystore
+          GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
+          GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
+        run: |
+          mkdir -p build
+          godot --headless --verbose --export-debug "Quest" build/project-m13-vr.apk
+          ls -la build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: project-m13-vr-apk
+          path: vr/build/project-m13-vr.apk
