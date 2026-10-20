@@ -158,8 +158,8 @@ func _on_release(name: String, hand: XRController3D) -> void:
 			_drop(hand, false)
 		released.emit(hand)
 
-# ---- Télékinésie : attraper un objet de loin au laser (GRIP), le déplacer avec la main,
-# ---- le rapprocher / l'éloigner avec le stick, le lâcher ou le lancer (GÂCHETTE = tir puissant).
+# ---- Télékinésie : GRIP maintenu vers un objet = il est retenu de loin, à sa distance.
+# ---- GÂCHETTE = il vient dans la main. Geste de la main + relâcher GRIP = lancer.
 func _try_telekinesis(hand: XRController3D) -> bool:
 	var ray: RayCast3D = lasers[hand]
 	if not ray.is_colliding():
