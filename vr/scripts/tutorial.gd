@@ -13,6 +13,8 @@ var hud: Node3D
 var obj_label: Label3D
 var talk_label: Label3D
 var hint_label: Label3D
+var power_label: Label3D
+var show_power := false
 var speaker_label: Label3D
 var held_page := false
 var page: Node3D
@@ -57,29 +59,30 @@ func _build_hud() -> void:
 	add_child(hud)
 	var back := MeshInstance3D.new()
 	var qm := QuadMesh.new()
-	qm.size = Vector2(1.7, 0.62)
+	qm.size = Vector2(1.8, 0.78)
 	back.mesh = qm
 	var m := StandardMaterial3D.new()
 	m.albedo_color = Color(0.02, 0.03, 0.07, 0.72)
 	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	back.material_override = m
-	back.position.z = -0.01
+	back.position = Vector3(0, -0.03, -0.01)
 	hud.add_child(back)
-	obj_label = _hud_label(Vector3(0, 0.25, 0), 36, Color(0.5, 0.78, 1.0), true)
-	speaker_label = _hud_label(Vector3(-0.78, 0.14, 0), 34, Color(1.0, 0.8, 0.45), false)
-	talk_label = _hud_label(Vector3(-0.78, 0.07, 0), 42, Color.WHITE, false)
+	obj_label = _hud_label(Vector3(0, 0.29, 0), 34, Color(0.5, 0.78, 1.0), true)
+	speaker_label = _hud_label(Vector3(-0.66, 0.19, 0), 32, Color(1.0, 0.8, 0.45), false)
+	talk_label = _hud_label(Vector3(-0.66, 0.12, 0), 38, Color.WHITE, false)
 	talk_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	hint_label = _hud_label(Vector3(0, -0.24, 0), 34, Color(0.6, 0.95, 0.7), true)
+	hint_label = _hud_label(Vector3(0, -0.2, 0), 32, Color(0.6, 0.95, 0.7), true)
+	power_label = _hud_label(Vector3(0, -0.32, 0), 32, Color(0.4, 1.0, 0.55), true)
 
 func _hud_label(pos: Vector3, size: int, color: Color, centered: bool) -> Label3D:
 	var l := Label3D.new()
 	l.position = pos
 	l.font_size = size
-	l.pixel_size = 0.0014
+	l.pixel_size = 0.0013
 	l.modulate = color
 	l.outline_size = 8
-	l.width = 1100
+	l.width = 1000
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if centered else HORIZONTAL_ALIGNMENT_LEFT
 	l.vertical_alignment = VERTICAL_ALIGNMENT_TOP if not centered else VERTICAL_ALIGNMENT_CENTER
@@ -92,7 +95,11 @@ func _process(delta: float) -> void:
 	var cam: XRCamera3D = rig.cam
 	var yaw := cam.global_rotation.y
 	var forward := Vector3(-sin(yaw), 0, -cos(yaw))
-	var goal := cam.global_position + forward * 1.5 + Vector3(0, -0.45, 0)
+	if show_power:
+		power_label.text = rig.power_label()
+		var st: Dictionary = rig.power_status()
+		power_label.modulate = Color(0.4, 0.75, 1.0) if st["state"] == "protege" else (Color(1.0, 0.6, 0.25) if st["state"] == "recharge" else Color(0.4, 1.0, 0.55))
+	var goal := cam.global_position + forward * 1.7 + Vector3(0, -0.45, 0)
 	hud.global_position = hud.global_position.lerp(goal, clampf(delta * 3.0, 0.0, 1.0))
 	var cur := hud.global_rotation.y
 	hud.global_rotation = Vector3(0, lerp_angle(cur, yaw, clampf(delta * 3.0, 0.0, 1.0)), 0)
@@ -146,12 +153,15 @@ func _run() -> void:
 	_set_objective("avance jusqu'à la lumière bleue")
 	await _say("Darius", "Une lueur bleue, plus loin sur le chemin. Je n'ai pas le choix : j'y vais.")
 	_hint("Stick GAUCHE : avancer, reculer, aller sur le côté.")
+	rig.hint_controller("left", "stick")
 	await _wait(func(): return _flat_dist(rig.cam.global_position, Vector3(0, 0, -9.0)) < 2.5)
 	# 3. Tourner
 	_set_objective("tourne-toi vers la pierre levée")
 	await _say("Darius", "Cette pierre, sur le côté... Elle brille de la même lumière.")
 	_hint("Stick DROIT : tourner. Ou tourne simplement ton corps.")
+	rig.hint_controller("right", "stick")
 	await _wait(_facing_stone)
+	rig.hint_controller("", "")
 	# 4. Attraper la page
 	page = Props.page()
 	page.position = Vector3(-2.2, 1.0, -10.0)
@@ -159,8 +169,10 @@ func _run() -> void:
 	_set_objective("attrape la page sur la souche")
 	await _say("Darius", "Une page de papier, posée sur cette souche. Elle flotte.")
 	_hint("Approche la main de la page et maintiens GRIP pour l'attraper.")
+	rig.hint_controller("both", "grip")
 	await _wait(func(): return held_by != null)
 	# 5. Lire
+	rig.hint_controller("", "")
 	_set_objective("amène la page près de ton visage")
 	await _say("Darius", "Elle est tiède. Je devrais la lire.")
 	_hint("Rapproche la page de tes yeux.")
@@ -174,18 +186,25 @@ func _run() -> void:
 	_set_objective("lance une caisse dans l'anneau bleu")
 	await _say("Darius", "Des caisses, là-bas, dans la clairière. Trop loin pour les toucher... et pourtant, je les sens.")
 	_hint("Vise une caisse avec le laser et MAINTIENS GRIP : elle flotte à distance.")
+	rig.hint_controller("both", "grip")
 	await _wait(func(): return tk_grabbed)
 	_hint("GACHETTE : la caisse vient dans ta main.")
+	rig.hint_controller("both", "trigger")
 	await _wait(func(): return tk_pulled)
 	_hint("Bouge la main d'un geste franc et LACHE GRIP pour lancer. Vise l'anneau !")
+	rig.hint_controller("both", "grip")
 	await _wait(func(): return target_hit)
 	_clear_crates()
+	rig.hint_controller("", "")
 	await _say("Darius", "Je déplace les choses d'un regard... Je ne sais pas ce que je suis en train de devenir.")
 	# 7. Pouvoir Retenir
 	_set_objective("utilise le pouvoir Retenir")
 	await _say("Darius", "Quelque chose m'observe, dans les arbres. Je dois pouvoir me protéger.")
 	_hint("Bouton A (main droite) : RETENIR. 5 secondes de protection, recharge 12 s.")
+	rig.hint_controller("right", "a")
+	show_power = true
 	await _wait(func(): return powered)
+	rig.hint_controller("", "")
 	light.light_energy = 4.0
 	await _say("Darius", "Le temps ralentit... C'est ça, « retenir ».")
 	light.light_energy = 2.4
@@ -194,9 +213,13 @@ func _run() -> void:
 	_build_silhouette()
 	await _say("Darius", "Une Silhouette ! Elle me prendra un souvenir si elle me touche. Recule, ou utilise Retenir !")
 	_hint("A = Retenir (recharge 12 s). Éloigne-toi d'elle avec le stick gauche.")
+	rig.hint_controller("right", "a")
 	survive_left = 20.0
 	await _wait(func(): return survive_left <= 0.0)
 	silhouette.visible = false
+	rig.hint_controller("", "")
+	show_power = false
+	power_label.text = ""
 	_hint("")
 	_set_objective("")
 	await _say("Darius", "Elle est partie. Je crois que je sais me servir de ce que j'ai. Le Non-lieu m'attend.")
@@ -211,6 +234,7 @@ func _run() -> void:
 	btn.rotation.y = yaw
 	add_child(btn)
 	btn.pressed.connect(func(): finished.emit())
+	rig.hint_controller("right", "trigger")
 	_say("", "Tutoriel terminé. Bravo !")
 
 func _facing_stone() -> bool:

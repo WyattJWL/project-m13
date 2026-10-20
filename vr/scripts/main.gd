@@ -67,8 +67,8 @@ func show_chapter_placeholder() -> void:
 	Props.forest(s, 21, 150, Rect2(-40, -45, 80, 65), [Rect2(-8, -8, 16, 14)])
 	Props.lantern(s, Vector3(-2.5, 0, -1.0), Color(1.0, 0.72, 0.38))
 	World.blue_lines(s, Vector3(0, 0, -5), 11.0, 12, 9.0)
-	World.label(s, "CHAPITRE 1 : MIEL", Vector3(0, 2.4, -3.2), 0.01, Color(1, 1, 1), 80)
-	World.label(s, "Jeudi de novembre. Il pleut sur Luynes.\n\nA suivre dans la prochaine version.", Vector3(0, 1.7, -3.2), 0.005, Color(0.75, 0.82, 0.95), 64)
+	World.label(s, "CHAPITRE 1 : MIEL", Vector3(0, 2.5, -3.2), 0.005, Color(1, 1, 1), 80)
+	World.label(s, "Jeudi de novembre. Il pleut sur Luynes.\n\nA suivre dans la prochaine version.", Vector3(0, 1.8, -3.2), 0.0028, Color(0.75, 0.82, 0.95), 56)
 	var b := Button3D.new()
 	b.text = "RETOUR"
 	b.position = Vector3(0, 1.0, -3.0)

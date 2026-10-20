@@ -35,8 +35,9 @@ func _ready() -> void:
 func spawn_point() -> Vector3:
 	return Vector3(0, 0, 1.5)
 
-func _button(parent: Node, text: String, pos: Vector3, callback: Callable) -> Node:
+func _button(parent: Node, text: String, pos: Vector3, callback: Callable, width := 2.1) -> Node:
 	var b := Button3D.new()
+	b.size = Vector3(width, 0.34, 0.06)
 	b.text = text
 	b.position = pos
 	parent.add_child(b)
@@ -46,25 +47,25 @@ func _button(parent: Node, text: String, pos: Vector3, callback: Callable) -> No
 func _build_main() -> void:
 	main_root = Node3D.new()
 	add_child(main_root)
-	World.label(main_root, "PROJECT-M13", Vector3(0, 2.75, -3.2), 0.014, Color(1, 1, 1), 96)
-	World.label(main_root, "TOME 1 : LA PAGE 404", Vector3(0, 2.3, -3.2), 0.007, Color(0.5, 0.75, 1.0), 80)
+	World.label(main_root, "PROJECT-M13", Vector3(0, 2.85, -3.2), 0.0045, Color(1, 1, 1), 96)
+	World.label(main_root, "TOME 1 : LA PAGE 404", Vector3(0, 2.3, -3.2), 0.0028, Color(0.5, 0.75, 1.0), 80)
 	var y := 1.75
 	_button(main_root, "JOUER", Vector3(0, y, -3.0), func(): play.emit())
 	_button(main_root, "TUTORIEL", Vector3(0, y - 0.4, -3.0), func(): tutorial.emit())
 	_button(main_root, "REGLAGES", Vector3(0, y - 0.8, -3.0), func(): _show(settings_root))
 	_button(main_root, "CREDITS", Vector3(0, y - 1.2, -3.0), func(): _show(credits_root))
 	_button(main_root, "QUITTER", Vector3(0, y - 1.6, -3.0), func(): quit.emit())
-	World.label(main_root, "Vise avec le laser, gachette pour valider", Vector3(0, 0.12, -2.9), 0.0035, Color(0.6, 0.65, 0.75), 56)
+	World.label(main_root, "Vise avec le laser, gachette pour valider", Vector3(0, 0.12, -2.9), 0.0026, Color(0.6, 0.65, 0.75), 56)
 
 func _build_settings() -> void:
 	settings_root = Node3D.new()
 	add_child(settings_root)
-	World.label(settings_root, "REGLAGES DE CONFORT", Vector3(0, 2.4, -3.2), 0.008, Color(1, 1, 1), 80)
+	World.label(settings_root, "REGLAGES DE CONFORT", Vector3(0, 2.55, -3.2), 0.0035, Color(1, 1, 1), 80)
 	var y := 1.9
-	_toggles["move"] = _button(settings_root, "", Vector3(0, y, -3.0), _toggle_move)
-	_toggles["turn"] = _button(settings_root, "", Vector3(0, y - 0.4, -3.0), _toggle_turn)
-	_toggles["vig"] = _button(settings_root, "", Vector3(0, y - 0.8, -3.0), _toggle_vignette)
-	_toggles["seat"] = _button(settings_root, "", Vector3(0, y - 1.2, -3.0), _toggle_seated)
+	_toggles["move"] = _button(settings_root, "", Vector3(0, y, -3.0), _toggle_move, 3.4)
+	_toggles["turn"] = _button(settings_root, "", Vector3(0, y - 0.4, -3.0), _toggle_turn, 3.4)
+	_toggles["vig"] = _button(settings_root, "", Vector3(0, y - 0.8, -3.0), _toggle_vignette, 3.4)
+	_toggles["seat"] = _button(settings_root, "", Vector3(0, y - 1.2, -3.0), _toggle_seated, 3.4)
 	_button(settings_root, "RETOUR", Vector3(0, y - 1.5, -3.0), func(): _show(main_root))
 	_refresh_toggles()
 
@@ -97,8 +98,8 @@ func _changed() -> void:
 func _build_credits() -> void:
 	credits_root = Node3D.new()
 	add_child(credits_root)
-	World.label(credits_root, "PROJECT-M13", Vector3(0, 2.4, -3.2), 0.01, Color(1, 1, 1), 80)
-	World.label(credits_root, "Une histoire de JWL Marketing\nTome 1 : La Page 404\n\nVersion de test VR\nMeta Quest", Vector3(0, 1.7, -3.2), 0.005, Color(0.75, 0.82, 0.95), 64)
+	World.label(credits_root, "PROJECT-M13", Vector3(0, 2.6, -3.2), 0.0045, Color(1, 1, 1), 80)
+	World.label(credits_root, "Une histoire de Wyatt (Siroxtag)\nTome 1 : La Page 404\n\nVersion de test VR\nMeta Quest", Vector3(0, 1.85, -3.2), 0.0028, Color(0.75, 0.82, 0.95), 56)
 	_button(credits_root, "RETOUR", Vector3(0, 0.95, -3.0), func(): _show(main_root))
 
 func _show(root: Node3D) -> void:

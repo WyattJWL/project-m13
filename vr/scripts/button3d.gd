@@ -8,6 +8,7 @@ var text := "BOUTON":
 		text = value
 		if _label:
 			_label.text = value
+			_fit()
 var size := Vector3(2.1, 0.34, 0.06)
 var _label: Label3D
 var _mesh: MeshInstance3D
@@ -40,6 +41,13 @@ func _ready() -> void:
 	_label.modulate = Color(0.9, 0.95, 1)
 	_label.outline_size = 6
 	add_child(_label)
+	_fit()
+
+# Réduit le texte pour qu'il tienne toujours dans le bouton.
+func _fit() -> void:
+	var chars := maxf(1.0, float(text.length()))
+	var wanted := (size.x * 0.88) / (chars * 0.58 * float(_label.font_size))
+	_label.pixel_size = minf(0.0042, wanted)
 
 func set_hover(on: bool) -> void:
 	if on == _hover:

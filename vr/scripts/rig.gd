@@ -11,7 +11,13 @@ signal telekinesis_pulled(body: RigidBody3D)
 signal grabbed(controller: XRController3D)
 signal released(controller: XRController3D)
 
+const Hands := preload("res://scripts/hands.gd")
 var cam: XRCamera3D
+var visuals: Dictionary = {}     # XRController3D -> { hand, ctrl, tag, part }
+var power_ui: Node3D
+var power_text: Label3D
+var power_bar: MeshInstance3D
+var _was_ready := true
 var hands: Array[XRController3D] = []
 var lasers: Dictionary = {}     # XRController3D -> RayCast3D
 var beams: Dictionary = {}      # XRController3D -> MeshInstance3D
@@ -47,6 +53,7 @@ func _ready() -> void:
 		hand.button_pressed.connect(_on_button.bind(hand))
 		hand.button_released.connect(_on_release.bind(hand))
 	_build_marker()
+	_build_power_ui()
 	_build_vignette()
 	position.y = 0.4 if Settings.seated else 0.0
 
@@ -57,18 +64,23 @@ func right() -> XRController3D:
 	return hands[1]
 
 func _build_hand(hand: XRController3D) -> void:
-	var body := MeshInstance3D.new()
-	var sm := SphereMesh.new()
-	sm.radius = 0.035
-	sm.height = 0.07
-	body.mesh = sm
-	var m := StandardMaterial3D.new()
-	m.albedo_color = Color(0.08, 0.1, 0.18)
-	m.emission_enabled = true
-	m.emission = Color(0.2, 0.5, 1.0)
-	m.emission_energy_multiplier = 0.8
-	body.material_override = m
-	hand.add_child(body)
+	var side := "left" if hand.tracker == &"left_hand" else "right"
+	var visual := Hands.hand(side)
+	hand.add_child(visual)
+	var ctrl := Hands.controller(side)
+	ctrl.visible = false
+	hand.add_child(ctrl)
+	var tag := Label3D.new()
+	tag.font_size = 40
+	tag.pixel_size = 0.0012
+	tag.modulate = Color(1.0, 0.85, 0.3)
+	tag.outline_size = 8
+	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	tag.no_depth_test = true
+	tag.position = Vector3(0, 0.12, -0.02)
+	tag.visible = false
+	hand.add_child(tag)
+	visuals[hand] = {"hand": visual, "ctrl": ctrl, "tag": tag, "part": ""}
 	var ray := RayCast3D.new()
 	ray.target_position = Vector3(0, 0, -8)
 	ray.collide_with_areas = true
@@ -229,6 +241,99 @@ func _update_telekinesis(delta: float) -> void:
 		body.angular_velocity = body.angular_velocity.lerp(Vector3.ZERO, 0.1)
 		(beams[hand].material_override as StandardMaterial3D).emission = Color(1.0, 0.45, 0.9)
 
+# ---- Aide visuelle : la main est remplacée par la manette, bouton en surbrillance ----
+# side : "left", "right", "both" ou "" (pour tout effacer). part : trigger, grip, stick, a, b.
+func hint_controller(side: String, part: String) -> void:
+	for h in hands:
+		var v: Dictionary = visuals[h]
+		var mine: bool = side == "both" or (side == "left" and h == left()) or (side == "right" and h == right())
+		v["part"] = part if mine else ""
+		(v["hand"] as Node3D).visible = not mine
+		(v["ctrl"] as Node3D).visible = mine
+		(v["tag"] as Label3D).visible = mine
+		if mine:
+			var names: Dictionary = (v["ctrl"] as Node3D).get_meta("names")
+			(v["tag"] as Label3D).text = String(names.get(part, part))
+
+func _update_hints() -> void:
+	var t := Time.get_ticks_msec() / 1000.0
+	for h in hands:
+		var v: Dictionary = visuals[h]
+		if v["part"] != "":
+			Hands.set_highlight(v["ctrl"], v["part"], t)
+
+# ---- Affichage du pouvoir au poignet gauche : protégé / recharge / prêt ----
+func _build_power_ui() -> void:
+	power_ui = Node3D.new()
+	power_ui.position = Vector3(0, 0.07, 0.1)
+	power_ui.rotation_degrees = Vector3(-70, 0, 0)
+	left().add_child(power_ui)
+	var back := MeshInstance3D.new()
+	var qm := QuadMesh.new()
+	qm.size = Vector2(0.2, 0.09)
+	back.mesh = qm
+	var m := StandardMaterial3D.new()
+	m.albedo_color = Color(0.02, 0.03, 0.07, 0.8)
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	back.material_override = m
+	power_ui.add_child(back)
+	power_text = Label3D.new()
+	power_text.font_size = 36
+	power_text.pixel_size = 0.0007
+	power_text.position = Vector3(0, 0.02, 0.002)
+	power_text.outline_size = 6
+	power_ui.add_child(power_text)
+	power_bar = MeshInstance3D.new()
+	var bm := BoxMesh.new()
+	bm.size = Vector3(0.18, 0.015, 0.004)
+	power_bar.mesh = bm
+	power_bar.position = Vector3(0, -0.025, 0.003)
+	var bmat := StandardMaterial3D.new()
+	bmat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	power_bar.material_override = bmat
+	power_ui.add_child(power_bar)
+
+func power_status() -> Dictionary:
+	var now := Time.get_ticks_msec() / 1000.0
+	var prot := maxf(0.0, protected_until - now)
+	if prot > 0.0:
+		return {"state": "protege", "left": prot, "ratio": prot / 5.0}
+	if power_cooldown > 0.0:
+		return {"state": "recharge", "left": power_cooldown, "ratio": 1.0 - power_cooldown / 7.0}
+	return {"state": "pret", "left": 0.0, "ratio": 1.0}
+
+func power_label() -> String:
+	var st := power_status()
+	match st["state"]:
+		"protege":
+			return "RETENIR : PROTEGE  %.1f s" % st["left"]
+		"recharge":
+			return "RETENIR : RECHARGE  %.1f s" % st["left"]
+	return "RETENIR : PRET  (A)"
+
+func _update_power_ui() -> void:
+	var st := power_status()
+	var color: Color
+	match st["state"]:
+		"protege":
+			color = Color(0.4, 0.75, 1.0)
+		"recharge":
+			color = Color(1.0, 0.6, 0.25)
+		_:
+			color = Color(0.4, 1.0, 0.55)
+	power_text.text = power_label()
+	power_text.modulate = color
+	(power_bar.material_override as StandardMaterial3D).albedo_color = color
+	var ratio := clampf(st["ratio"], 0.02, 1.0)
+	power_bar.scale.x = ratio
+	power_bar.position.x = -0.09 * (1.0 - ratio)
+	var is_ready: bool = st["state"] == "pret"
+	if is_ready and not _was_ready:
+		_haptic(right(), 0.8)
+		_haptic(left(), 0.8)
+	_was_ready = is_ready
+
 func use_power() -> void:
 	if power_cooldown > 0.0:
 		return
@@ -247,6 +352,8 @@ func _physics_process(delta: float) -> void:
 	power_cooldown = maxf(0.0, power_cooldown - delta)
 	_update_lasers()
 	_update_telekinesis(delta)
+	_update_hints()
+	_update_power_ui()
 	for hand in hands:
 		if not held.has(hand):
 			(beams[hand].material_override as StandardMaterial3D).emission = Color(0.4, 0.75, 1.0)
