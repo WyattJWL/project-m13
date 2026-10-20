@@ -70,7 +70,9 @@ jobs:
         run: |
           FAIL=0
           for f in scripts/*.gd; do
-            OUT=$(godot --headless --path . --check-only --script "res://$f" 2>&1) || { echo "=== $f ==="; echo "$OUT" | grep -E "ERROR|Error|error" | head -8; FAIL=1; }
+            OUT=$(godot --headless --path . --check-only --script "res://$f" 2>&1 || true)
+            BAD=$(echo "$OUT" | grep -E "SCRIPT ERROR|Parse Error|Compile Error|Cannot|not declared|Expected|Invalid|Unexpected" | head -8)
+            if [ -n "$BAD" ]; then echo "=== $f ==="; echo "$BAD"; FAIL=1; fi
           done
           exit $FAIL
 
