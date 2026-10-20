@@ -65,7 +65,9 @@ jobs:
           F=android/build/src/main/AndroidManifest.xml
           if [ -f "$F" ]; then
             grep -q "com.oculus.supportedDevices" "$F" || sed -i 's#</application>#    <meta-data android:name="com.oculus.supportedDevices" android:value="quest2|questpro|quest3|quest3s" />\n    </application>#' "$F"
-            grep -n "supportedDevices" "$F" || echo "ATTENTION : balise non ajoutée"
+            grep -q "com.oculus.intent.category.VR" "$F" || sed -i 's#<category android:name="android.intent.category.LAUNCHER" />#&\n                <category android:name="com.oculus.intent.category.VR" />#' "$F"
+            grep -q "com.oculus.vr.focusaware" "$F" || sed -i 's#tools:ignore="UnusedAttribute" />#tools:ignore="UnusedAttribute" >\n            <meta-data android:name="com.oculus.vr.focusaware" android:value="true" />\n        </activity>#' "$F"
+            grep -nE "supportedDevices|intent.category.VR|focusaware" "$F" || echo "ATTENTION : balises non ajoutées"
           else
             echo "ATTENTION : manifeste principal introuvable, balise non ajoutée"
           fi
